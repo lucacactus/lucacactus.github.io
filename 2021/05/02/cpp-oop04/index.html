@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+    <meta name="author" content="John Doe">
+
+
+
+
+
+<title>C++面向对象（四）继承 | Hexo</title>
+
+
+
+    <link rel="icon" href="/favicon.ico">
+
+
+
+
+    <!-- stylesheets list from _config.yml -->
+    
+    <link rel="stylesheet" href="/css/style.css">
+    
+
+
+
+    <!-- scripts list from _config.yml -->
+    
+    <script src="/js/script.js"></script>
+    
+    <script src="/js/tocbot.min.js"></script>
+    
+
+
+
+    
+    
+        
+    
+
+
+<meta name="generator" content="Hexo 5.4.0"></head>
+<body>
+    <div class="wrapper">
+        <header>
+    <nav class="navbar">
+        <div class="container">
+            <div class="navbar-header header-logo"><a href="/">Qiny&#39;s Blog</a></div>
+            <div class="menu navbar-right">
+                
+                    <a class="menu-item" href="/archives">Posts</a>
+                
+                    <a class="menu-item" href="/category">Categories</a>
+                
+                    <a class="menu-item" href="/tag">Tags</a>
+                
+                    <a class="menu-item" href="/about">About</a>
+                
+                <input id="switch_default" type="checkbox" class="switch_default">
+                <label for="switch_default" class="toggleBtn"></label>
+            </div>
+        </div>
+    </nav>
+
+    
+    <nav class="navbar-mobile" id="nav-mobile">
+        <div class="container">
+            <div class="navbar-header">
+                <div>
+                    <a href="/">Qiny&#39;s Blog</a><a id="mobile-toggle-theme">·&nbsp;Light</a>
+                </div>
+                <div class="menu-toggle" onclick="mobileBtn()">&#9776; Menu</div>
+            </div>
+            <div class="menu" id="mobile-menu">
+                
+                    <a class="menu-item" href="/archives">Posts</a>
+                
+                    <a class="menu-item" href="/category">Categories</a>
+                
+                    <a class="menu-item" href="/tag">Tags</a>
+                
+                    <a class="menu-item" href="/about">About</a>
+                
+            </div>
+        </div>
+    </nav>
+
+</header>
+<script>
+    var mobileBtn = function f() {
+        var toggleMenu = document.getElementsByClassName("menu-toggle")[0];
+        var mobileMenu = document.getElementById("mobile-menu");
+        if(toggleMenu.classList.contains("active")){
+           toggleMenu.classList.remove("active")
+            mobileMenu.classList.remove("active")
+        }else{
+            toggleMenu.classList.add("active")
+            mobileMenu.classList.add("active")
+        }
+    }
+</script>
+        <div class="main">
+            <div class="container">
+    
+    
+        <div class="post-toc">
+    <div class="tocbot-list">
+    </div>
+    <div class="tocbot-list-menu">
+        <a class="tocbot-toc-expand" onclick="expand_toc()">Expand all</a>
+        <a onclick="go_top()">Back to top</a>
+        <a onclick="go_bottom()">Go to bottom</a>
+    </div>
+</div>
+
+<script>
+    document.ready(
+        function () {
+            tocbot.init({
+                tocSelector: '.tocbot-list',
+                contentSelector: '.post-content',
+                headingSelector: 'h1, h2, h3, h4, h5',
+                collapseDepth: 1,
+                orderedList: false,
+                scrollSmooth: true,
+            })
+        }
+    )
+
+    function expand_toc() {
+        var b = document.querySelector(".tocbot-toc-expand");
+        tocbot.init({
+            tocSelector: '.tocbot-list',
+            contentSelector: '.post-content',
+            headingSelector: 'h1, h2, h3, h4, h5',
+            collapseDepth: 6,
+            orderedList: false,
+            scrollSmooth: true,
+        });
+        b.setAttribute("onclick", "collapse_toc()");
+        b.innerHTML = "Collapse all"
+    }
+
+    function collapse_toc() {
+        var b = document.querySelector(".tocbot-toc-expand");
+        tocbot.init({
+            tocSelector: '.tocbot-list',
+            contentSelector: '.post-content',
+            headingSelector: 'h1, h2, h3, h4, h5',
+            collapseDepth: 1,
+            orderedList: false,
+            scrollSmooth: true,
+        });
+        b.setAttribute("onclick", "expand_toc()");
+        b.innerHTML = "Expand all"
+    }
+
+    function go_top() {
+        window.scrollTo(0, 0);
+    }
+
+    function go_bottom() {
+        window.scrollTo(0, document.body.scrollHeight);
+    }
+
+</script>
+    
+
+    
+    <article class="post-wrap">
+        <header class="post-header">
+            <h1 class="post-title">C++面向对象（四）继承</h1>
+            
+                <div class="post-meta">
+                    
+                        Author: <a itemprop="author" rel="author" href="/">John Doe</a>
+                    
+
+                    
+                        <span class="post-time">
+                        Date: <a href="#">May 2, 2021&nbsp;&nbsp;2:26:00</a>
+                        </span>
+                    
+                    
+                </div>
+            
+        </header>
+
+        <div class="post-content">
+            <h2 id="继承"><a href="#继承" class="headerlink" title="继承"></a>继承</h2><p>继承是面向对象三大特性之一。定义这些类时，下级别的成员处了用友上一级的共性，还有自己的特性。</p>
+<p>这个时候我们就可以考虑利用继承的技术，减少重复代码。</p>
+<h3 id="1-继承的基本语法"><a href="#1-继承的基本语法" class="headerlink" title="1.  继承的基本语法"></a>1.  继承的基本语法</h3><p>继承的好处：可以减少重复的代码</p>
+<p>class A: class B;</p>
+<p>A 类称为子类 或 派生类</p>
+<p>B类称为父类 或 基类</p>
+<p>派生类中的成员，包含两大部分：</p>
+<p>一类是从基类继承过来的 一类是自己增加的成员。</p>
+<p>从基类继承过来的表现其共性，而新增的成员体现了其个性</p>
+<h3 id="2-继承方式"><a href="#2-继承方式" class="headerlink" title="2.  继承方式"></a>2.  继承方式</h3><p>继承的语法：class 子类: 继承方式 父类</p>
+<p><strong>继承方式一共有三种</strong></p>
+<ul>
+<li>公共继承</li>
+<li>保护继承</li>
+<li>私有继承</li>
+</ul>
+<p>父类私有属性：三种继承方式都获取不到</p>
+<p>保护方式继承：父类的公有属性变成了子类的保护属性</p>
+<p>私有方式继承：父类的公有属性和保护属性变成了子类的私有属性</p>
+<h3 id="3-继承中的对象模型"><a href="#3-继承中的对象模型" class="headerlink" title="3. 继承中的对象模型"></a>3. 继承中的对象模型</h3><ul>
+<li>父类中所有非静态成员属性都会被子类继承下去。</li>
+<li>父类中私有成员属性 是被编译器给隐藏了，因此是访问不到，但是确实被继承下去了。</li>
+</ul>
+<h3 id="4-继承中构造和析构顺序"><a href="#4-继承中构造和析构顺序" class="headerlink" title="4. 继承中构造和析构顺序"></a>4. 继承中构造和析构顺序</h3><p>子类继承父类后，当创建子类对象，也会调用父类的构造函数</p>
+<p>问题：父类和子类的构造和析构顺序是谁先谁后？</p>
+<p>继承的构造和析构顺序如下：</p>
+<p>先构造父类，再构造子类，析构的顺序与构造的顺序相反</p>
+<h3 id="5-继承同名成员处理方式"><a href="#5-继承同名成员处理方式" class="headerlink" title="5. 继承同名成员处理方式"></a>5. 继承同名成员处理方式</h3><p>问题：当子类与父类出现同名的成员，如何通过子类对象，访问到子类或父类中同名的数据呢？</p>
+<ul>
+<li>访问子类同名成员 直接访问即可</li>
+<li>访问父类同名成员 需要加作用域</li>
+</ul>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">A</span> &#123;</span></span><br><span class="line">    <span class="keyword">public</span>:</span><br><span class="line">    <span class="keyword">int</span> data;</span><br><span class="line">    <span class="built_in">A</span>() : <span class="built_in">data</span>(<span class="number">10</span>) &#123; cout &lt;&lt; <span class="string">&quot;A的构造函数&quot;</span> &lt;&lt; endl; &#125;</span><br><span class="line">    ~<span class="built_in">A</span>() &#123; cout &lt;&lt; <span class="string">&quot;A的析构函数&quot;</span> &lt;&lt; endl; &#125;</span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">function</span><span class="params">()</span> </span>&#123; cout &lt;&lt; <span class="string">&quot;A的func的调用&quot;</span> &lt;&lt; endl; &#125;</span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">function</span><span class="params">(<span class="keyword">int</span> a)</span> </span>&#123; cout &lt;&lt; <span class="string">&quot;A的func(int)的调用&quot;</span> &lt;&lt; endl; &#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">B</span> :</span> <span class="keyword">public</span> A &#123;</span><br><span class="line">    <span class="keyword">public</span>:</span><br><span class="line">    <span class="keyword">int</span> data;</span><br><span class="line">    <span class="built_in">B</span>() : <span class="built_in">data</span>(<span class="number">20</span>) &#123; cout &lt;&lt; <span class="string">&quot;B的构造函数&quot;</span> &lt;&lt; endl; &#125;</span><br><span class="line">    ~<span class="built_in">B</span>() &#123; cout &lt;&lt; <span class="string">&quot;B的析构函数&quot;</span> &lt;&lt; endl; &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">function</span><span class="params">()</span> </span>&#123; cout &lt;&lt; <span class="string">&quot;B的func的调用&quot;</span> &lt;&lt; endl; &#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">C</span> :</span> <span class="keyword">public</span> A &#123;</span><br><span class="line">    <span class="keyword">public</span>:</span><br><span class="line">    <span class="built_in">C</span>() &#123; cout &lt;&lt; <span class="string">&quot;C的构造函数&quot;</span> &lt;&lt; endl; &#125;</span><br><span class="line">    ~<span class="built_in">C</span>() &#123; cout &lt;&lt; <span class="string">&quot;C的析构函数&quot;</span> &lt;&lt; endl; &#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">test1</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    B b;</span><br><span class="line">    cout &lt;&lt; <span class="string">&quot;b.data = &quot;</span> &lt;&lt; b.data &lt;&lt; endl; <span class="comment">// 子类的成员变量</span></span><br><span class="line">    cout &lt;&lt; <span class="string">&quot;b.A::data = &quot;</span> &lt;&lt; b.A::data &lt;&lt; endl;<span class="comment">// 通过父类的作用域访问到父类的成员变量</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">test2</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    B b;</span><br><span class="line">    C c;</span><br><span class="line">    b.<span class="built_in">function</span>();  <span class="comment">// 直接调用 调用 是子类中的同名成员</span></span><br><span class="line">    c.<span class="built_in">function</span>();</span><br><span class="line">    <span class="comment">// 如果子类中出现和父类同名的成员函数，子类的同名成员会隐藏掉父类中所有同名成员函数</span></span><br><span class="line">    <span class="comment">// b.function(2); // b就不能调用A的重载function</span></span><br><span class="line">    b.A::<span class="built_in">function</span>(<span class="number">2</span>);  <span class="comment">// 如果b想调用A的重载函数，就必须添加作用域</span></span><br><span class="line">    c.<span class="built_in">function</span>(<span class="number">2</span>);  <span class="comment">// c没有出现同名成员函数，所以可以调用A的重载函数</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">(<span class="keyword">int</span> argc, <span class="keyword">char</span> <span class="keyword">const</span>* argv[])</span> </span>&#123;</span><br><span class="line">    <span class="comment">// test1();</span></span><br><span class="line">    <span class="built_in">test2</span>();</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment">    A的构造函数</span></span><br><span class="line"><span class="comment">    B的构造函数</span></span><br><span class="line"><span class="comment">    A的构造函数</span></span><br><span class="line"><span class="comment">    C的构造函数</span></span><br><span class="line"><span class="comment">    B的func的调用</span></span><br><span class="line"><span class="comment">    A的func的调用</span></span><br><span class="line"><span class="comment">    A的func(int)的调用</span></span><br><span class="line"><span class="comment">    A的func(int)的调用</span></span><br><span class="line"><span class="comment">    C的析构函数</span></span><br><span class="line"><span class="comment">    A的析构函数</span></span><br><span class="line"><span class="comment">    B的析构函数</span></span><br><span class="line"><span class="comment">    A的析构函数</span></span><br><span class="line"><span class="comment">*/</span></span><br></pre></td></tr></table></figure>
+
+<p>总结：</p>
+<ol>
+<li>子类对象可以直接访问发哦子类中的同名成员</li>
+<li>子类对象加作用域可以访问到父类同名成员</li>
+<li>当子类与父类拥有同名的成员函数，子类会隐藏父类中同名成员函数，加作用域可以访问到父类中同名函数</li>
+</ol>
+<h3 id="6-继承同名静态成员处理方式"><a href="#6-继承同名静态成员处理方式" class="headerlink" title="6. 继承同名静态成员处理方式"></a>6. 继承同名静态成员处理方式</h3><p>问题：继承中同名的静态成员在子类对象上如何进行访问？</p>
+<p>静态成员和非静态成员出现同名，处理方法一致</p>
+<ul>
+<li>访问子类同名成员     直接访问即可</li>
+<li>访问父类同名成员     需要加作用域</li>
+</ul>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">A</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="keyword">static</span> <span class="keyword">int</span> data;  </span><br><span class="line">&#125;;</span><br><span class="line"><span class="keyword">int</span> A::data = <span class="number">100</span>;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">B</span>:</span> <span class="keyword">public</span> A &#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="keyword">static</span> <span class="keyword">int</span> data;    </span><br><span class="line">&#125;;</span><br><span class="line"><span class="keyword">int</span> B::data = <span class="number">200</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 同名静态成员属性</span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">test01</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="comment">// 1. 通过对象访问</span></span><br><span class="line">    B b;</span><br><span class="line">    cout &lt;&lt; <span class="string">&quot;子类下data: &quot;</span> &lt;&lt; b.data &lt;&lt; endl; </span><br><span class="line">    cout &lt;&lt; <span class="string">&quot;父类下data: &quot;</span> &lt;&lt; b.A::data &lt;&lt; endl; </span><br><span class="line">    </span><br><span class="line">    <span class="comment">// 2. 通过类名访问    </span></span><br><span class="line">    cout &lt;&lt; <span class="string">&quot;子类下data: &quot;</span> &lt;&lt; B::data &lt;&lt; endl; </span><br><span class="line">    <span class="comment">// 第一个:: —— 代表通过类名方式访问</span></span><br><span class="line">    <span class="comment">// 第二个:: —— 代表访问父类作用域下</span></span><br><span class="line">    cout &lt;&lt; <span class="string">&quot;子类下data: &quot;</span> &lt;&lt; B::A::data &lt;&lt; endl; </span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment">	子类下data: 200</span></span><br><span class="line"><span class="comment">	父类下data: 100</span></span><br><span class="line"><span class="comment">	子类下data: 200</span></span><br><span class="line"><span class="comment">	子类下data: 100</span></span><br><span class="line"><span class="comment">*/</span></span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="7-多继承语法"><a href="#7-多继承语法" class="headerlink" title="7. 多继承语法"></a>7. 多继承语法</h3><p>C++允许一个类继承多个类</p>
+<p>语法：class 子类 : 继承方式 父类1, 继承方式 父类2 …</p>
+<p>多继承可能会引发父类中有同名成员出现，需要加作用域区分</p>
+<p><strong>C++实际开发中不建议使用</strong></p>
+<h3 id="8-菱形继承"><a href="#8-菱形继承" class="headerlink" title="8. 菱形继承"></a>8. 菱形继承</h3><p><strong>菱形继承概念：</strong></p>
+<ul>
+<li>两个派生类继承同一个基类</li>
+<li>又有某个类同时继承着两个派生类</li>
+<li>这种继承被称为菱形继承，或者钻石继承</li>
+</ul>
+<p><strong>菱形继承问题：</strong></p>
+<ol>
+<li><p>多继承引发了二义性</p>
+<p>解决方案：使用作用域区分来自于不同父类的属性</p>
+</li>
+<li><p>派生类自动继承了两份数据</p>
+<p>在父类的继承方式前加virtual，使父类的父类变成虚基类</p>
+</li>
+</ol>
+
+        </div>
+
+        
+            <section class="post-copyright">
+                
+                    <p class="copyright-item">
+                        <span>Author:</span>
+                        <span>John Doe</span>
+                    </p>
+                
+                
+                    <p class="copyright-item">
+                        <span>Permalink:</span>
+                        <span><a href="http://example.com/2021/05/02/cpp-oop04/">http://example.com/2021/05/02/cpp-oop04/</a></span>
+                    </p>
+                
+                
+                    <p class="copyright-item">
+                        <span>License:</span>
+                        <span>Copyright (c) 2019 <a target="_blank" rel="noopener" href="http://creativecommons.org/licenses/by-nc/4.0/">CC-BY-NC-4.0</a> LICENSE</span>
+                    </p>
+                
+                
+                     <p class="copyright-item">
+                         <span>Slogan:</span>
+                         <span>Do you believe in <strong>DESTINY</strong>?</span>
+                     </p>
+                
+
+            </section>
+        
+        <section class="post-tags">
+            <div>
+                <span>Tag(s):</span>
+                <span class="tag">
+                    
+                    
+                        <a href="/tags/C-%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1/"># C++面向对象</a>
+                    
+                        
+                </span>
+            </div>
+            <div>
+                <a href="javascript:window.history.back();">back</a>
+                <span>· </span>
+                <a href="/">home</a>
+            </div>
+        </section>
+        <section class="post-nav">
+            
+                <a class="prev" rel="prev" href="/2021/05/02/cpp-oop05/">C++面向对象（五）多态</a>
+            
+            
+            <a class="next" rel="next" href="/2021/05/02/cpp-oop03/">C++面向对象（三）友元&运算符重载</a>
+            
+        </section>
+
+
+    </article>
+</div>
+
+        </div>
+        <footer id="footer" class="footer">
+    <div class="copyright">
+        <span>© John Doe | Powered by <a href="https://hexo.io" target="_blank">Hexo</a> & <a href="https://github.com/Siricee/hexo-theme-Chic" target="_blank">Chic</a></span>
+    </div>
+</footer>
+
+    </div>
+</body>
+</html>

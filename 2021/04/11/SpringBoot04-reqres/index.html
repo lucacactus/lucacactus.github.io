@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+    <meta name="author" content="John Doe">
+
+
+
+
+
+<title>SpringBoot04-请求和响应 | Hexo</title>
+
+
+
+    <link rel="icon" href="/favicon.ico">
+
+
+
+
+    <!-- stylesheets list from _config.yml -->
+    
+    <link rel="stylesheet" href="/css/style.css">
+    
+
+
+
+    <!-- scripts list from _config.yml -->
+    
+    <script src="/js/script.js"></script>
+    
+    <script src="/js/tocbot.min.js"></script>
+    
+
+
+
+    
+    
+        
+    
+
+
+<meta name="generator" content="Hexo 5.4.0"></head>
+<body>
+    <div class="wrapper">
+        <header>
+    <nav class="navbar">
+        <div class="container">
+            <div class="navbar-header header-logo"><a href="/">Qiny&#39;s Blog</a></div>
+            <div class="menu navbar-right">
+                
+                    <a class="menu-item" href="/archives">Posts</a>
+                
+                    <a class="menu-item" href="/category">Categories</a>
+                
+                    <a class="menu-item" href="/tag">Tags</a>
+                
+                    <a class="menu-item" href="/about">About</a>
+                
+                <input id="switch_default" type="checkbox" class="switch_default">
+                <label for="switch_default" class="toggleBtn"></label>
+            </div>
+        </div>
+    </nav>
+
+    
+    <nav class="navbar-mobile" id="nav-mobile">
+        <div class="container">
+            <div class="navbar-header">
+                <div>
+                    <a href="/">Qiny&#39;s Blog</a><a id="mobile-toggle-theme">·&nbsp;Light</a>
+                </div>
+                <div class="menu-toggle" onclick="mobileBtn()">&#9776; Menu</div>
+            </div>
+            <div class="menu" id="mobile-menu">
+                
+                    <a class="menu-item" href="/archives">Posts</a>
+                
+                    <a class="menu-item" href="/category">Categories</a>
+                
+                    <a class="menu-item" href="/tag">Tags</a>
+                
+                    <a class="menu-item" href="/about">About</a>
+                
+            </div>
+        </div>
+    </nav>
+
+</header>
+<script>
+    var mobileBtn = function f() {
+        var toggleMenu = document.getElementsByClassName("menu-toggle")[0];
+        var mobileMenu = document.getElementById("mobile-menu");
+        if(toggleMenu.classList.contains("active")){
+           toggleMenu.classList.remove("active")
+            mobileMenu.classList.remove("active")
+        }else{
+            toggleMenu.classList.add("active")
+            mobileMenu.classList.add("active")
+        }
+    }
+</script>
+        <div class="main">
+            <div class="container">
+    
+    
+        <div class="post-toc">
+    <div class="tocbot-list">
+    </div>
+    <div class="tocbot-list-menu">
+        <a class="tocbot-toc-expand" onclick="expand_toc()">Expand all</a>
+        <a onclick="go_top()">Back to top</a>
+        <a onclick="go_bottom()">Go to bottom</a>
+    </div>
+</div>
+
+<script>
+    document.ready(
+        function () {
+            tocbot.init({
+                tocSelector: '.tocbot-list',
+                contentSelector: '.post-content',
+                headingSelector: 'h1, h2, h3, h4, h5',
+                collapseDepth: 1,
+                orderedList: false,
+                scrollSmooth: true,
+            })
+        }
+    )
+
+    function expand_toc() {
+        var b = document.querySelector(".tocbot-toc-expand");
+        tocbot.init({
+            tocSelector: '.tocbot-list',
+            contentSelector: '.post-content',
+            headingSelector: 'h1, h2, h3, h4, h5',
+            collapseDepth: 6,
+            orderedList: false,
+            scrollSmooth: true,
+        });
+        b.setAttribute("onclick", "collapse_toc()");
+        b.innerHTML = "Collapse all"
+    }
+
+    function collapse_toc() {
+        var b = document.querySelector(".tocbot-toc-expand");
+        tocbot.init({
+            tocSelector: '.tocbot-list',
+            contentSelector: '.post-content',
+            headingSelector: 'h1, h2, h3, h4, h5',
+            collapseDepth: 1,
+            orderedList: false,
+            scrollSmooth: true,
+        });
+        b.setAttribute("onclick", "expand_toc()");
+        b.innerHTML = "Expand all"
+    }
+
+    function go_top() {
+        window.scrollTo(0, 0);
+    }
+
+    function go_bottom() {
+        window.scrollTo(0, document.body.scrollHeight);
+    }
+
+</script>
+    
+
+    
+    <article class="post-wrap">
+        <header class="post-header">
+            <h1 class="post-title">SpringBoot04-请求和响应</h1>
+            
+                <div class="post-meta">
+                    
+                        Author: <a itemprop="author" rel="author" href="/">John Doe</a>
+                    
+
+                    
+                        <span class="post-time">
+                        Date: <a href="#">April 11, 2021&nbsp;&nbsp;19:25:34</a>
+                        </span>
+                    
+                    
+                </div>
+            
+        </header>
+
+        <div class="post-content">
+            <h2 id="1-获取路径变量-PathVariable"><a href="#1-获取路径变量-PathVariable" class="headerlink" title="1. 获取路径变量 @PathVariable"></a>1. 获取路径变量 @PathVariable</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@ResponseBody</span></span><br><span class="line"><span class="meta">@GetMapping(&quot;/car/&#123;id&#125;/owner/&#123;username&#125;&quot;)</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> Map&lt;String, Object&gt; <span class="title">get01</span><span class="params">(</span></span></span><br><span class="line"><span class="function"><span class="params">    // 可以动态获取每个路径变量的值</span></span></span><br><span class="line"><span class="function"><span class="params">    <span class="meta">@PathVariable(&quot;id&quot;)</span> Integer id,</span></span></span><br><span class="line"><span class="function"><span class="params">    <span class="meta">@PathVariable(&quot;username&quot;)</span> String username,</span></span></span><br><span class="line"><span class="function"><span class="params">    // 也可以使用Map获取所有路径变量的值</span></span></span><br><span class="line"><span class="function"><span class="params">    <span class="meta">@PathVariable</span> Map&lt;String, Object&gt; pv</span></span></span><br><span class="line"><span class="function"><span class="params">)</span> </span>&#123;</span><br><span class="line">    Map&lt;String, Object&gt; map = <span class="keyword">new</span> HashMap&lt;&gt;();</span><br><span class="line">    map.put(<span class="string">&quot;id&quot;</span>, id);</span><br><span class="line">    map.put(<span class="string">&quot;username&quot;</span>, username);</span><br><span class="line">    map.put(<span class="string">&quot;map&quot;</span>, pv);</span><br><span class="line">    <span class="keyword">return</span> map;</span><br><span class="line">    <span class="comment">/* 访问localhost:8080/car/20/owner/zhangsan，结果如下：</span></span><br><span class="line"><span class="comment">        &#123;</span></span><br><span class="line"><span class="comment">            &quot;id&quot;: 20,</span></span><br><span class="line"><span class="comment">            &quot;map&quot;: &#123;</span></span><br><span class="line"><span class="comment">                &quot;id&quot;: &quot;20&quot;,</span></span><br><span class="line"><span class="comment">                &quot;username&quot;: &quot;zhangsan&quot;</span></span><br><span class="line"><span class="comment">            &#125;,</span></span><br><span class="line"><span class="comment">            &quot;username&quot;: &quot;zhangsan&quot;</span></span><br><span class="line"><span class="comment">        &#125;</span></span><br><span class="line"><span class="comment">         */</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="2-获取请求头（请求的一些信息）-RequestHeader"><a href="#2-获取请求头（请求的一些信息）-RequestHeader" class="headerlink" title="2. 获取请求头（请求的一些信息）@RequestHeader"></a>2. 获取请求头（请求的一些信息）@RequestHeader</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@ResponseBody</span></span><br><span class="line"><span class="meta">@GetMapping(&quot;/reqheader&quot;)</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> Map&lt;String, Object&gt; <span class="title">get02</span><span class="params">(</span></span></span><br><span class="line"><span class="function"><span class="params">    // 获取指定的请求头属性</span></span></span><br><span class="line"><span class="function"><span class="params">    <span class="meta">@RequestHeader(&quot;Host&quot;)</span> String host,</span></span></span><br><span class="line"><span class="function"><span class="params">    // 获取所有的请求头属性</span></span></span><br><span class="line"><span class="function"><span class="params">    <span class="meta">@RequestHeader</span> Map&lt;String, String&gt; header</span></span></span><br><span class="line"><span class="function"><span class="params">)</span> </span>&#123;</span><br><span class="line">    Map&lt;String, Object&gt; map = <span class="keyword">new</span> HashMap&lt;&gt;();</span><br><span class="line">    map.put(<span class="string">&quot;host&quot;</span>, host);</span><br><span class="line">    map.put(<span class="string">&quot;header&quot;</span>, header);</span><br><span class="line">    <span class="keyword">return</span> map;</span><br><span class="line">    <span class="comment">// 访问localhost:8080/reqheader，结果如下：</span></span><br><span class="line">    <span class="comment">//         &#123;</span></span><br><span class="line">    <span class="comment">//            &quot;host&quot;: &quot;localhost:8080&quot;,</span></span><br><span class="line">    <span class="comment">//            &quot;header&quot;: &#123;</span></span><br><span class="line">    <span class="comment">//                &quot;content-type&quot;: &quot;application/x-www-form-urlencoded&quot;,</span></span><br><span class="line">    <span class="comment">//                &quot;user-agent&quot;: &quot;PostmanRuntime/7.26.10&quot;,</span></span><br><span class="line">    <span class="comment">//                &quot;accept&quot;: &quot;*/*&quot;,</span></span><br><span class="line">    <span class="comment">//                &quot;postman-token&quot;: &quot;3e1366d5-2e3e-49d9-a893-2e37e8fd28a0&quot;,</span></span><br><span class="line">    <span class="comment">//                        &quot;host&quot;: &quot;localhost:8080&quot;,</span></span><br><span class="line">    <span class="comment">//                        &quot;accept-encoding&quot;: &quot;gzip, deflate, br&quot;,</span></span><br><span class="line">    <span class="comment">//                        &quot;connection&quot;: &quot;keep-alive&quot;</span></span><br><span class="line">    <span class="comment">//            &#125;</span></span><br><span class="line">    <span class="comment">//        &#125;</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="3-获取请求携带的参数-RequestParam"><a href="#3-获取请求携带的参数-RequestParam" class="headerlink" title="3. 获取请求携带的参数 @RequestParam"></a>3. 获取请求携带的参数 @RequestParam</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@ResponseBody</span></span><br><span class="line"><span class="meta">@PostMapping(&quot;/param&quot;)</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> Map&lt;String, Object&gt; <span class="title">post01</span><span class="params">(</span></span></span><br><span class="line"><span class="function"><span class="params">    // 获取请求参数</span></span></span><br><span class="line"><span class="function"><span class="params">    <span class="meta">@RequestParam(&quot;interests&quot;)</span> List&lt;String&gt; list,</span></span></span><br><span class="line"><span class="function"><span class="params">    <span class="meta">@RequestParam</span> Map&lt;String, Object&gt; obj</span></span></span><br><span class="line"><span class="function"><span class="params">)</span> </span>&#123;</span><br><span class="line">    Map&lt;String, Object&gt; map = <span class="keyword">new</span> HashMap&lt;&gt;();</span><br><span class="line">    map.put(<span class="string">&quot;interests&quot;</span>, list);</span><br><span class="line">    map.put(<span class="string">&quot;map&quot;</span>, obj);</span><br><span class="line">    <span class="keyword">return</span> map;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="4-获取Cookie-CookieValue"><a href="#4-获取Cookie-CookieValue" class="headerlink" title="4. 获取Cookie @CookieValue"></a>4. 获取Cookie @CookieValue</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@ResponseBody</span></span><br><span class="line"><span class="meta">@GetMapping(&quot;/cookie&quot;)</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> Map&lt;String, Object&gt; <span class="title">get03</span><span class="params">(</span></span></span><br><span class="line"><span class="function"><span class="params">    // 获取Cookie的值</span></span></span><br><span class="line"><span class="function"><span class="params">    <span class="meta">@CookieValue(&quot;Cookie_1&quot;)</span> String value,</span></span></span><br><span class="line"><span class="function"><span class="params">    // 获取Cookie的所有属性</span></span></span><br><span class="line"><span class="function"><span class="params">    <span class="meta">@CookieValue(&quot;Cookie_1&quot;)</span> Cookie cookie</span></span></span><br><span class="line"><span class="function"><span class="params">)</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    Map&lt;String, Object&gt; map = <span class="keyword">new</span> HashMap&lt;&gt;();</span><br><span class="line">    map.put(<span class="string">&quot;value&quot;</span>, value);</span><br><span class="line">    map.put(<span class="string">&quot;cookie&quot;</span>, cookie);</span><br><span class="line">    <span class="keyword">return</span> map;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="5-获取请求体-RequestBody"><a href="#5-获取请求体-RequestBody" class="headerlink" title="5. 获取请求体 @RequestBody"></a>5. 获取请求体 @RequestBody</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@ResponseBody</span></span><br><span class="line"><span class="meta">@PostMapping(&quot;/reqbody&quot;)</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> Student <span class="title">post02</span><span class="params">(<span class="meta">@RequestBody</span> Student student)</span> </span>&#123;</span><br><span class="line">    System.out.println(student);</span><br><span class="line">    <span class="keyword">return</span> student;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="6-获取request域属性-RequestAttribute"><a href="#6-获取request域属性-RequestAttribute" class="headerlink" title="6. 获取request域属性 @RequestAttribute"></a>6. 获取request域属性 @RequestAttribute</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@GetMapping(&quot;/goto&quot;)</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> String <span class="title">get04</span><span class="params">(HttpServletRequest request)</span> </span>&#123;</span><br><span class="line">    request.setAttribute(<span class="string">&quot;name&quot;</span>, <span class="string">&quot;张三&quot;</span>);</span><br><span class="line">    request.setAttribute(<span class="string">&quot;age&quot;</span>, <span class="number">24</span>);</span><br><span class="line">    <span class="keyword">return</span> <span class="string">&quot;forward:/success&quot;</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 处理转发请求</span></span><br><span class="line"><span class="meta">@ResponseBody</span></span><br><span class="line"><span class="meta">@GetMapping(&quot;/success&quot;)</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> Map&lt;String, Object&gt; <span class="title">get05</span><span class="params">(</span></span></span><br><span class="line"><span class="function"><span class="params">    <span class="meta">@RequestAttribute(&quot;name&quot;)</span> String name,</span></span></span><br><span class="line"><span class="function"><span class="params">    <span class="meta">@RequestAttribute(&quot;age&quot;)</span> Integer age,</span></span></span><br><span class="line"><span class="function"><span class="params">    HttpServletRequest request</span></span></span><br><span class="line"><span class="function"><span class="params">)</span> </span>&#123;</span><br><span class="line">    String attributeName = (String) request.getAttribute(<span class="string">&quot;name&quot;</span>);</span><br><span class="line">    Integer attributeAge = (Integer) request.getAttribute(<span class="string">&quot;age&quot;</span>);</span><br><span class="line">    Map&lt;String, Object&gt; map = <span class="keyword">new</span> HashMap&lt;&gt;();</span><br><span class="line">    map.put(<span class="string">&quot;attributeName&quot;</span>, attributeName);</span><br><span class="line">    map.put(<span class="string">&quot;attributeAge&quot;</span>, attributeAge);</span><br><span class="line">    map.put(<span class="string">&quot;name&quot;</span>, name);</span><br><span class="line">    map.put(<span class="string">&quot;age&quot;</span>, age);</span><br><span class="line">    <span class="keyword">return</span> map;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="7-处理矩阵变量-MatrixVariable"><a href="#7-处理矩阵变量-MatrixVariable" class="headerlink" title="7. 处理矩阵变量 @MatrixVariable"></a>7. 处理矩阵变量 @MatrixVariable</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 在使用之前要开启矩阵变量的注解</span></span><br><span class="line"><span class="comment">// //matrixvar/m1;matrix=1</span></span><br><span class="line"><span class="meta">@ResponseBody</span></span><br><span class="line"><span class="meta">@GetMapping(&quot;/matrixvar/&#123;path&#125;&quot;)</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> Map&lt;String, Object&gt; <span class="title">get05</span><span class="params">(</span></span></span><br><span class="line"><span class="function"><span class="params">    <span class="meta">@MatrixVariable(&quot;matrix&quot;)</span> String matrix,</span></span></span><br><span class="line"><span class="function"><span class="params">    <span class="meta">@PathVariable(&quot;path&quot;)</span> String path</span></span></span><br><span class="line"><span class="function"><span class="params">)</span> </span>&#123;</span><br><span class="line">    Map&lt;String, Object&gt; map = <span class="keyword">new</span> HashMap&lt;&gt;();</span><br><span class="line">    map.put(<span class="string">&quot;matrix&quot;</span>, matrix);</span><br><span class="line">    map.put(<span class="string">&quot;path&quot;</span>, path);</span><br><span class="line">    <span class="keyword">return</span> map;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 同时绑定多个矩阵变量</span></span><br><span class="line"><span class="comment">// /matrixvar/m1;matrix=1/m2;matrix=2/</span></span><br><span class="line"><span class="meta">@ResponseBody</span></span><br><span class="line"><span class="meta">@GetMapping(&quot;/matrixvar/&#123;path1&#125;/&#123;path2&#125;&quot;)</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> Map&lt;String, Object&gt; <span class="title">get06</span><span class="params">(</span></span></span><br><span class="line"><span class="function"><span class="params">    <span class="meta">@PathVariable(&quot;path1&quot;)</span> String path1,</span></span></span><br><span class="line"><span class="function"><span class="params">    <span class="meta">@PathVariable(&quot;path2&quot;)</span> String path2,</span></span></span><br><span class="line"><span class="function"><span class="params">    <span class="meta">@MatrixVariable(value = &quot;matrix&quot;, pathVar = &quot;path1&quot;)</span> String matrix1,</span></span></span><br><span class="line"><span class="function"><span class="params">    <span class="meta">@MatrixVariable(value = &quot;matrix&quot;, pathVar = &quot;path2&quot;)</span> String matrix2</span></span></span><br><span class="line"><span class="function"><span class="params">)</span> </span>&#123;</span><br><span class="line">    Map&lt;String, Object&gt; map = <span class="keyword">new</span> HashMap&lt;&gt;();</span><br><span class="line">    Map&lt;String, Object&gt; map1 = <span class="keyword">new</span> HashMap&lt;&gt;();</span><br><span class="line">    Map&lt;String, Object&gt; map2 = <span class="keyword">new</span> HashMap&lt;&gt;();</span><br><span class="line"></span><br><span class="line">    map1.put(<span class="string">&quot;path&quot;</span>, path1);</span><br><span class="line">    map1.put(<span class="string">&quot;matrix&quot;</span>, matrix1);</span><br><span class="line">    map2.put(<span class="string">&quot;path&quot;</span>, path2);</span><br><span class="line">    map2.put(<span class="string">&quot;matrix&quot;</span>, matrix2);</span><br><span class="line">    map.put(<span class="string">&quot;matrix1&quot;</span>, map1);</span><br><span class="line">    map.put(<span class="string">&quot;matrix2&quot;</span>, map2);</span><br><span class="line">    <span class="keyword">return</span> map;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+        </div>
+
+        
+            <section class="post-copyright">
+                
+                    <p class="copyright-item">
+                        <span>Author:</span>
+                        <span>John Doe</span>
+                    </p>
+                
+                
+                    <p class="copyright-item">
+                        <span>Permalink:</span>
+                        <span><a href="http://example.com/2021/04/11/SpringBoot04-reqres/">http://example.com/2021/04/11/SpringBoot04-reqres/</a></span>
+                    </p>
+                
+                
+                    <p class="copyright-item">
+                        <span>License:</span>
+                        <span>Copyright (c) 2019 <a target="_blank" rel="noopener" href="http://creativecommons.org/licenses/by-nc/4.0/">CC-BY-NC-4.0</a> LICENSE</span>
+                    </p>
+                
+                
+                     <p class="copyright-item">
+                         <span>Slogan:</span>
+                         <span>Do you believe in <strong>DESTINY</strong>?</span>
+                     </p>
+                
+
+            </section>
+        
+        <section class="post-tags">
+            <div>
+                <span>Tag(s):</span>
+                <span class="tag">
+                    
+                    
+                        <a href="/tags/Springboot/"># Springboot</a>
+                    
+                        
+                </span>
+            </div>
+            <div>
+                <a href="javascript:window.history.back();">back</a>
+                <span>· </span>
+                <a href="/">home</a>
+            </div>
+        </section>
+        <section class="post-nav">
+            
+                <a class="prev" rel="prev" href="/2021/04/11/SpringBoot05-web-vue/">SpringBoot05-前后端分离的准备</a>
+            
+            
+            <a class="next" rel="next" href="/2021/04/11/SSM03-SpringMVC/">SpringMVC</a>
+            
+        </section>
+
+
+    </article>
+</div>
+
+        </div>
+        <footer id="footer" class="footer">
+    <div class="copyright">
+        <span>© John Doe | Powered by <a href="https://hexo.io" target="_blank">Hexo</a> & <a href="https://github.com/Siricee/hexo-theme-Chic" target="_blank">Chic</a></span>
+    </div>
+</footer>
+
+    </div>
+</body>
+</html>

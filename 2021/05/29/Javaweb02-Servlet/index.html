@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+    <meta name="author" content="John Doe">
+
+
+
+
+
+<title>Javaweb（二） - Servlet 入门 | Hexo</title>
+
+
+
+    <link rel="icon" href="/favicon.ico">
+
+
+
+
+    <!-- stylesheets list from _config.yml -->
+    
+    <link rel="stylesheet" href="/css/style.css">
+    
+
+
+
+    <!-- scripts list from _config.yml -->
+    
+    <script src="/js/script.js"></script>
+    
+    <script src="/js/tocbot.min.js"></script>
+    
+
+
+
+    
+    
+        
+    
+
+
+<meta name="generator" content="Hexo 5.4.0"></head>
+<body>
+    <div class="wrapper">
+        <header>
+    <nav class="navbar">
+        <div class="container">
+            <div class="navbar-header header-logo"><a href="/">Qiny&#39;s Blog</a></div>
+            <div class="menu navbar-right">
+                
+                    <a class="menu-item" href="/archives">Posts</a>
+                
+                    <a class="menu-item" href="/category">Categories</a>
+                
+                    <a class="menu-item" href="/tag">Tags</a>
+                
+                    <a class="menu-item" href="/about">About</a>
+                
+                <input id="switch_default" type="checkbox" class="switch_default">
+                <label for="switch_default" class="toggleBtn"></label>
+            </div>
+        </div>
+    </nav>
+
+    
+    <nav class="navbar-mobile" id="nav-mobile">
+        <div class="container">
+            <div class="navbar-header">
+                <div>
+                    <a href="/">Qiny&#39;s Blog</a><a id="mobile-toggle-theme">·&nbsp;Light</a>
+                </div>
+                <div class="menu-toggle" onclick="mobileBtn()">&#9776; Menu</div>
+            </div>
+            <div class="menu" id="mobile-menu">
+                
+                    <a class="menu-item" href="/archives">Posts</a>
+                
+                    <a class="menu-item" href="/category">Categories</a>
+                
+                    <a class="menu-item" href="/tag">Tags</a>
+                
+                    <a class="menu-item" href="/about">About</a>
+                
+            </div>
+        </div>
+    </nav>
+
+</header>
+<script>
+    var mobileBtn = function f() {
+        var toggleMenu = document.getElementsByClassName("menu-toggle")[0];
+        var mobileMenu = document.getElementById("mobile-menu");
+        if(toggleMenu.classList.contains("active")){
+           toggleMenu.classList.remove("active")
+            mobileMenu.classList.remove("active")
+        }else{
+            toggleMenu.classList.add("active")
+            mobileMenu.classList.add("active")
+        }
+    }
+</script>
+        <div class="main">
+            <div class="container">
+    
+    
+        <div class="post-toc">
+    <div class="tocbot-list">
+    </div>
+    <div class="tocbot-list-menu">
+        <a class="tocbot-toc-expand" onclick="expand_toc()">Expand all</a>
+        <a onclick="go_top()">Back to top</a>
+        <a onclick="go_bottom()">Go to bottom</a>
+    </div>
+</div>
+
+<script>
+    document.ready(
+        function () {
+            tocbot.init({
+                tocSelector: '.tocbot-list',
+                contentSelector: '.post-content',
+                headingSelector: 'h1, h2, h3, h4, h5',
+                collapseDepth: 1,
+                orderedList: false,
+                scrollSmooth: true,
+            })
+        }
+    )
+
+    function expand_toc() {
+        var b = document.querySelector(".tocbot-toc-expand");
+        tocbot.init({
+            tocSelector: '.tocbot-list',
+            contentSelector: '.post-content',
+            headingSelector: 'h1, h2, h3, h4, h5',
+            collapseDepth: 6,
+            orderedList: false,
+            scrollSmooth: true,
+        });
+        b.setAttribute("onclick", "collapse_toc()");
+        b.innerHTML = "Collapse all"
+    }
+
+    function collapse_toc() {
+        var b = document.querySelector(".tocbot-toc-expand");
+        tocbot.init({
+            tocSelector: '.tocbot-list',
+            contentSelector: '.post-content',
+            headingSelector: 'h1, h2, h3, h4, h5',
+            collapseDepth: 1,
+            orderedList: false,
+            scrollSmooth: true,
+        });
+        b.setAttribute("onclick", "expand_toc()");
+        b.innerHTML = "Expand all"
+    }
+
+    function go_top() {
+        window.scrollTo(0, 0);
+    }
+
+    function go_bottom() {
+        window.scrollTo(0, document.body.scrollHeight);
+    }
+
+</script>
+    
+
+    
+    <article class="post-wrap">
+        <header class="post-header">
+            <h1 class="post-title">Javaweb（二） - Servlet 入门</h1>
+            
+                <div class="post-meta">
+                    
+                        Author: <a itemprop="author" rel="author" href="/">John Doe</a>
+                    
+
+                    
+                        <span class="post-time">
+                        Date: <a href="#">May 29, 2021&nbsp;&nbsp;16:17:06</a>
+                        </span>
+                    
+                    
+                </div>
+            
+        </header>
+
+        <div class="post-content">
+            <h2 id="Servlet"><a href="#Servlet" class="headerlink" title="Servlet"></a>Servlet</h2><h3 id="1-简介"><a href="#1-简介" class="headerlink" title="1 简介"></a>1 简介</h3><ol>
+<li>什么是 Servlet：JavaEE 规范之一，规范就是接口。</li>
+<li>Servlet 是 JavaWeb 三大组件之一（Servlet 程序、Filter 过滤器和 Listener 监听器。）</li>
+<li>Servlet 是运行在服务器上的一个 Java 小程序，它可以接收客户端发送过来的请求，并相应数据给客户端。</li>
+</ol>
+<h3 id="2-第一个-Servlet-程序"><a href="#2-第一个-Servlet-程序" class="headerlink" title="2 第一个 Servlet 程序"></a>2 第一个 Servlet 程序</h3><ol>
+<li><p>编写一个类去实现 Servlet 接口。</p>
+</li>
+<li><p>实现 service 方法，处理请求，并相应数据。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Servlet01</span> <span class="keyword">implements</span> <span class="title">Servlet</span> </span>&#123;</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">init</span><span class="params">(ServletConfig servletConfig)</span> <span class="keyword">throws</span> ServletException </span>&#123;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> ServletConfig <span class="title">getServletConfig</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">null</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">service</span><span class="params">(</span></span></span><br><span class="line"><span class="function"><span class="params">        ServletRequest servletRequest, </span></span></span><br><span class="line"><span class="function"><span class="params">        ServletResponse servletResponse</span></span></span><br><span class="line"><span class="function"><span class="params">    )</span> <span class="keyword">throws</span> ServletException, IOException </span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        System.out.println(<span class="string">&quot;Servlet 被访问&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">getServletInfo</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">null</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">destroy</span><span class="params">()</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+<li><p>到 web.xml 中去配置 Servlet 程序的访问地址。</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">web-app</span> <span class="attr">xmlns</span>=<span class="string">&quot;http://xmlns.jcp.org/xml/ns/javaee&quot;</span></span></span><br><span class="line"><span class="tag">         <span class="attr">xmlns:xsi</span>=<span class="string">&quot;http://www.w3.org/2001/XMLSchema-instance&quot;</span></span></span><br><span class="line"><span class="tag">         <span class="attr">xsi:schemaLocation</span>=<span class="string">&quot;http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_4_0.xsd&quot;</span></span></span><br><span class="line"><span class="tag">         <span class="attr">version</span>=<span class="string">&quot;4.0&quot;</span>&gt;</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">&lt;!-- servlet 标签给 Tomcat 配置 Servlet 程序 --&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">servlet</span>&gt;</span></span><br><span class="line">        <span class="comment">&lt;!-- servlet-name 标签是给 Servlet 程序起别名（一般是类名） --&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">servlet-name</span>&gt;</span>Servlet01<span class="tag">&lt;/<span class="name">servlet-name</span>&gt;</span></span><br><span class="line">        <span class="comment">&lt;!-- servlet-class 标签是 Servlet 程序的全类名 --&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">servlet-class</span>&gt;</span>ctgu.qiny.servlet.Servlet01<span class="tag">&lt;/<span class="name">servlet-class</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">servlet</span>&gt;</span></span><br><span class="line">    <span class="comment">&lt;!-- servlet-mapping标签给servlet程序配置访问地址 --&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">servlet-mapping</span>&gt;</span></span><br><span class="line">        <span class="comment">&lt;!-- servlet-name 标签的作用是告诉服务器，我当前配置的地址给哪个Servlet程序使用 --&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">servlet-name</span>&gt;</span>Servlet01<span class="tag">&lt;/<span class="name">servlet-name</span>&gt;</span></span><br><span class="line">        <span class="comment">&lt;!-- urL-pattern 标签配置访问地址 --&gt;</span></span><br><span class="line">        <span class="comment">&lt;!-- / 斜杠在服务器解析的时候，表示地址为：http://ip:port/工程路径  --&gt;</span></span><br><span class="line">        <span class="comment">&lt;!-- /servlet01 斜杠 + 路径在服务器解析的时候，表示地址为：http://ip:port/工程路径/servlet01  --&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">url-pattern</span>&gt;</span>/servlet01<span class="tag">&lt;/<span class="name">url-pattern</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">servlet-mapping</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">web-app</span>&gt;</span></span><br></pre></td></tr></table></figure></li>
+<li><p>启动项目，在默认打开浏览器的地址后添加配置好的访问路径，可以看到控制台打印出了 service 方法中重写的打印内容。</p>
+</li>
+<li><p>常见的错误：</p>
+<ul>
+<li>Invalid &lt;url-pattern&gt; xxx in servlet mapping：url-pattern 标签配置访问路径前一定要加上斜杠。</li>
+<li>Servlet mapping specifies an unknown servlet name Xxx：servlet-name 配置错误/不匹配。（一般来说编译器会爆红提醒）。</li>
+<li>java.lang.ClassNotFoundException: xxx.xxx.Xxx：servlet-class 配置全类名错误，服务器找不到这个类（这个也会被编译器识别爆红）。</li>
+</ul>
+</li>
+</ol>
+<h3 id="3-Servlet-的生命周期"><a href="#3-Servlet-的生命周期" class="headerlink" title="3 Servlet 的生命周期"></a>3 Servlet 的生命周期</h3><ol>
+<li>执行 Servlet 构造器方法。</li>
+<li>执行 init 初始化方法。</li>
+<li>执行 service 方法。</li>
+<li>执行 destroy 销毁方法。</li>
+</ol>
+<p>构造器方法和初始化方法是在第一次访问的时候 Servlet 程序调用，service 方法每次访问都会调用，web 工程停止的时候调用销毁方法。</p>
+<h3 id="4-请求的分发处理"><a href="#4-请求的分发处理" class="headerlink" title="4 请求的分发处理"></a>4 请求的分发处理</h3><ol>
+<li><p>在 web 文件夹下创建 a.html 文件，用于发送 get 和 post 请求。</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">body</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">form</span> <span class="attr">action</span>=<span class="string">&quot;http://localhost:8080/web_learning/servlet01&quot;</span> <span class="attr">method</span>=<span class="string">&quot;get&quot;</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">&quot;submit&quot;</span> <span class="attr">value</span>=<span class="string">&quot;get请求&quot;</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">form</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">form</span> <span class="attr">action</span>=<span class="string">&quot;http://localhost:8080/web_learning/servlet01&quot;</span> <span class="attr">method</span>=<span class="string">&quot;post&quot;</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">&quot;submit&quot;</span> <span class="attr">value</span>=<span class="string">&quot;post请求&quot;</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">form</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">body</span>&gt;</span></span><br></pre></td></tr></table></figure></li>
+<li><p>为 Servlet程序添加处理 get 请求和 post 请求的方法，以及在 service 方法中对不同请求的分发</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Override</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">service</span><span class="params">(ServletRequest servletRequest, ServletResponse servletResponse)</span> <span class="keyword">throws</span> ServletException, IOException </span>&#123;</span><br><span class="line">    System.out.println(<span class="string">&quot;3. service 方法 ==== Servlet 被访问&quot;</span>);</span><br><span class="line"></span><br><span class="line">    HttpServletRequest request = (HttpServletRequest) servletRequest;</span><br><span class="line">    HttpServletResponse response = (HttpServletResponse) servletResponse;</span><br><span class="line">    </span><br><span class="line">    String method = request.getMethod();</span><br><span class="line">    System.out.println(method);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (method.equals(<span class="string">&quot;GET&quot;</span>)) &#123;</span><br><span class="line">        doGet(request, response);</span><br><span class="line">    &#125; <span class="keyword">else</span> <span class="keyword">if</span> (method.equals(<span class="string">&quot;POST&quot;</span>)) &#123;</span><br><span class="line">        doPost(request, response);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">doGet</span><span class="params">(HttpServletRequest request, HttpServletResponse response)</span> </span>&#123;</span><br><span class="line">    System.out.println(<span class="string">&quot;处理Get请求！&quot;</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">doPost</span><span class="params">(HttpServletRequest request, HttpServletResponse response)</span> </span>&#123;</span><br><span class="line">    System.out.println(<span class="string">&quot;处理Post请求！&quot;</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+<li><p>启动服务器，访问 a.html，分别向服务器发送 get 和 post 请求。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">3. service 方法 ==== Servlet 被访问</span><br><span class="line">GET</span><br><span class="line">处理Get请求！</span><br><span class="line">3. service 方法 ==== Servlet 被访问</span><br><span class="line">POST</span><br><span class="line">处理Post请求！</span><br></pre></td></tr></table></figure></li>
+</ol>
+<h3 id="5-通过继承-HttpServlet-实现-Servlet-程序"><a href="#5-通过继承-HttpServlet-实现-Servlet-程序" class="headerlink" title="5 通过继承 HttpServlet 实现 Servlet 程序"></a>5 通过继承 HttpServlet 实现 Servlet 程序</h3><p>一般在实际项目开发中，都是使用继承 HttpServlet 类的方式去实现 Servlet 程序。</p>
+<ol>
+<li><p>编写一个类去继承 HttpServlet 类。</p>
+</li>
+<li><p>根据业务需要重写 doGet 和 doPost 方法。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Servlet02</span> <span class="keyword">extends</span> <span class="title">HttpServlet</span> </span>&#123;</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">doGet</span><span class="params">(HttpServletRequest req, HttpServletResponse resp)</span> <span class="keyword">throws</span> ServletException, IOException </span>&#123;</span><br><span class="line">        System.out.println(<span class="string">&quot;处理 get 请求&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">doPost</span><span class="params">(HttpServletRequest req, HttpServletResponse resp)</span> <span class="keyword">throws</span> ServletException, IOException </span>&#123;</span><br><span class="line">        System.out.println(<span class="string">&quot;处理 post 请求&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+<li><p>到 web.xml 中配置 Servlet 程序的访问地址。</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">servlet</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">servlet-name</span>&gt;</span>Servlet02<span class="tag">&lt;/<span class="name">servlet-name</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">servlet-class</span>&gt;</span>ctgu.qiny.servlet.Servlet02<span class="tag">&lt;/<span class="name">servlet-class</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">servlet</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">servlet-mapping</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">servlet-name</span>&gt;</span>Servlet02<span class="tag">&lt;/<span class="name">servlet-name</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">url-pattern</span>&gt;</span>/servlet02<span class="tag">&lt;/<span class="name">url-pattern</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">servlet-mapping</span>&gt;</span></span><br></pre></td></tr></table></figure></li>
+<li><p>编辑用于发送请求的 a.html</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">body</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">h2</span>&gt;</span>servlet01<span class="tag">&lt;/<span class="name">h2</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">form</span> <span class="attr">action</span>=<span class="string">&quot;http://localhost:8080/web_learning/servlet01&quot;</span> <span class="attr">method</span>=<span class="string">&quot;get&quot;</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">&quot;submit&quot;</span> <span class="attr">value</span>=<span class="string">&quot;get请求&quot;</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">form</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">form</span> <span class="attr">action</span>=<span class="string">&quot;http://localhost:8080/web_learning/servlet01&quot;</span> <span class="attr">method</span>=<span class="string">&quot;post&quot;</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">&quot;submit&quot;</span> <span class="attr">value</span>=<span class="string">&quot;post请求&quot;</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">form</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">h2</span>&gt;</span>servlet02<span class="tag">&lt;/<span class="name">h2</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">form</span> <span class="attr">action</span>=<span class="string">&quot;http://localhost:8080/web_learning/servlet02&quot;</span> <span class="attr">method</span>=<span class="string">&quot;get&quot;</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">&quot;submit&quot;</span> <span class="attr">value</span>=<span class="string">&quot;get请求&quot;</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">form</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">form</span> <span class="attr">action</span>=<span class="string">&quot;http://localhost:8080/web_learning/servlet02&quot;</span> <span class="attr">method</span>=<span class="string">&quot;post&quot;</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">&quot;submit&quot;</span> <span class="attr">value</span>=<span class="string">&quot;post请求&quot;</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">form</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">body</span>&gt;</span></span><br></pre></td></tr></table></figure></li>
+<li><p>启动服务器，访问 a.html，向服务器发送请求，观察控制台打印情况。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">处理 get 请求</span><br><span class="line">处理 post 请求</span><br></pre></td></tr></table></figure></li>
+</ol>
+<h3 id="6-使用-IDEA-创建-Servlet"><a href="#6-使用-IDEA-创建-Servlet" class="headerlink" title="6 使用 IDEA 创建 Servlet"></a>6 使用 IDEA 创建 Servlet</h3><ul>
+<li>右键 Servlet 存放的包，选择 create new Servlet，填入 Servlet 的信息并取消勾选 Create Java EE 6 annotated class（勾选时是使用注解来配置Servlet）。</li>
+<li>进入web.xml，配置新建 Servlet 的访问路径。</li>
+</ul>
+<h3 id="7-Servlet-类的继承体系"><a href="#7-Servlet-类的继承体系" class="headerlink" title="7 Servlet 类的继承体系"></a>7 Servlet 类的继承体系</h3><ul>
+<li><p>Servlet 接口，只是负责定义 Servlet 程序的访问规范。</p>
+</li>
+<li><p>GenericServlet 抽象类 实现 Servlet 接口，做了很多空实现，并持有一个 ServletConfig 类的引用，并对 ServletConfig 的使用做一些方法。</p>
+</li>
+<li><p>HttpServlet 抽象类 继承 GenericServlet 类，实现了service 方法，并实现了请求的分发。doGet 和 doPost 负责抛出异常，声明不支持的 Get / Post 请求方式。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">String method = req.getMethod();<span class="comment">// GET、POST 分别对应 doGet 和 doPost 方法。</span></span><br></pre></td></tr></table></figure></li>
+<li><p>自定义的 Servlet 程序继承 HttpServlet 类。开发人员只需要根据业务的需要，重写 doGet 和 doPost 请求即可。</p>
+</li>
+</ul>
+<h3 id="8-ServletConfig-类的使用"><a href="#8-ServletConfig-类的使用" class="headerlink" title="8 ServletConfig 类的使用"></a>8 ServletConfig 类的使用</h3><p>ServletConfig 类从类名上来看，就知道是 Servlet 程序的配置信息类。</p>
+<ul>
+<li><p>ServletConfig 类的三大作用：</p>
+<ol>
+<li>获取 Servlet 类的别名（web.xml 中配置的 servlet-name 的值）</li>
+<li>获取初始化参数 init-param</li>
+<li>获取 ServletContext 对象</li>
+</ol>
+</li>
+<li><p>实例：在自定义 Servlet03 程序中重写 init 方法，通过 ServletConfig 执行上述操作</p>
+<ul>
+<li><p>编辑 Servlet03 的 xml 配置文件，添加 init-param 初始化参数标签。</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">servlet</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">servlet-name</span>&gt;</span>Servlet03<span class="tag">&lt;/<span class="name">servlet-name</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">servlet-class</span>&gt;</span>ctgu.qiny.servlet.Servlet03<span class="tag">&lt;/<span class="name">servlet-class</span>&gt;</span></span><br><span class="line">    <span class="comment">&lt;!-- init-param 是初始化参数 --&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">init-param</span>&gt;</span></span><br><span class="line">        <span class="comment">&lt;!-- 参数名 --&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">param-name</span>&gt;</span>jdbc<span class="tag">&lt;/<span class="name">param-name</span>&gt;</span></span><br><span class="line">        <span class="comment">&lt;!-- 参数值 --&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">param-value</span>&gt;</span>jdbc:mysql://localhost:3306/jdbc-learning?useSSL=false<span class="symbol">&amp;amp;</span>serverTimezone=Asia/Shanghai<span class="tag">&lt;/<span class="name">param-value</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">init-param</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">servlet</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">servlet-mapping</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">servlet-name</span>&gt;</span>Servlet03<span class="tag">&lt;/<span class="name">servlet-name</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">url-pattern</span>&gt;</span>/servlet03<span class="tag">&lt;/<span class="name">url-pattern</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">servlet-mapping</span>&gt;</span></span><br></pre></td></tr></table></figure></li>
+<li><p>重写 Servlet03 类的 init 方法</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Override</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">init</span><span class="params">(ServletConfig config)</span> <span class="keyword">throws</span> ServletException </span>&#123;</span><br><span class="line">    <span class="keyword">super</span>.init(config);</span><br><span class="line">    System.out.println(<span class="string">&quot;Servlet03 的初始化方法&quot;</span>);</span><br><span class="line">    <span class="comment">// 1. 获取 Servlet 程序的别名。</span></span><br><span class="line">    System.out.println(<span class="string">&quot;Servlet03 程序的别名是：&quot;</span> + config.getServletName());</span><br><span class="line">    <span class="comment">// 2. 获取初始化参数 init-param</span></span><br><span class="line">    System.out.println(<span class="string">&quot;初始化参数 jdbc 的值是：&quot;</span> + config.getInitParameter(<span class="string">&quot;jdbc&quot;</span>));</span><br><span class="line">    <span class="comment">// 3. 获取 ServletContext 对象</span></span><br><span class="line">    System.out.println(<span class="string">&quot;获取 ServletContext 对象：&quot;</span>+config.getServletContext());</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+<li><p>启动服务器，访问 /servlet03，观察控制台打印情况：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">Servlet03 的初始化方法</span><br><span class="line">Servlet03 程序的别名是：Servlet03</span><br><span class="line">初始化参数 jdbc 的值是：jdbc:mysql://localhost:3306/jdbc-learning?useSSL=false&amp;serverTimezone=Asia/Shanghai</span><br><span class="line">获取 ServletContext 对象：org.apache.catalina.core.ApplicationContextFacade@17767f4c</span><br></pre></td></tr></table></figure></li>
+</ul>
+</li>
+</ul>
+<h3 id="9-ServletConfig-类的补充说明"><a href="#9-ServletConfig-类的补充说明" class="headerlink" title="9 ServletConfig 类的补充说明"></a>9 ServletConfig 类的补充说明</h3><ul>
+<li><p>Servlet 程序和 ServletConfig 对象都是由 Tomcat 负责创建，开发人员负责使用。</p>
+</li>
+<li><p>Servlet 程序默认是第一次访问的时候创建，ServletConfig 是每个 Servlet 程序创建时，就创建一个对应的 ServletConfig 对象。</p>
+</li>
+<li><p>除了 init 方法自带的 ServletConfig 参数对象，Servlet 类中的其他方法也可以通过调用 getServletConfig 方法获取 ServletConfig 对象。</p>
+</li>
+<li><p>但当使用 init 方法通过参数获取 ServletConfig 对象时，必须调用父类的 init 方法，否则其他方法获取到的 ServletConfig 类只是个空对象。</p>
+</li>
+<li><p>每个 ServletConfig 对象只能获取到自己所在的 Servlet 配置信息，而不能获取到其他 Servlet 对象的。</p>
+</li>
+</ul>
+<h3 id="10-ServletContext-类的使用"><a href="#10-ServletContext-类的使用" class="headerlink" title="10 ServletContext 类的使用"></a>10 ServletContext 类的使用</h3><ol>
+<li><p>什么是 ServletContext ？</p>
+<ul>
+<li><p>ServletContext 是一个接口，他表示 Servlet 上下文对象。</p>
+</li>
+<li><p>一个 web 工程，只有一个 ServletContext 对象实例。</p>
+</li>
+<li><p>ServletContext 对象是一个域对象（可以像 Map 一样存取数据的对象，这里的域指的是存取数据的操作范围）。</p>
+</li>
+<li><p>ServletContext 对象的域就是整个 web 项目工程。</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>存数据</th>
+<th>取数据</th>
+<th>删除数据</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Map</td>
+<td>put</td>
+<td>get</td>
+<td>remove</td>
+</tr>
+<tr>
+<td>域对象</td>
+<td>setAttribute</td>
+<td>getAttribute</td>
+<td>removeAttibute</td>
+</tr>
+</tbody></table>
+</li>
+<li><p>ServletContext 是在 web 工程部署启动的时候创建，在 web 工程停止的时候销毁。</p>
+</li>
+</ul>
+</li>
+</ol>
+<ol start="2">
+<li>ServletContext 类的常见作用<ul>
+<li>获取 web.xml 中配置的上下文参数 context-param</li>
+<li>获取当前的工程路径，格式：/工程路径</li>
+<li>获取工程部署后在服务器磁盘上的绝对路径</li>
+<li>像 Map 一样存储数据</li>
+</ul>
+</li>
+</ol>
+<ol start="3">
+<li><p>示例：演示 ServletContext 类的相关操作</p>
+<ul>
+<li><p>在 web.xml 中配置上下文参数</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">context-param</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">param-name</span>&gt;</span>key1<span class="tag">&lt;/<span class="name">param-name</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">param-value</span>&gt;</span>value1<span class="tag">&lt;/<span class="name">param-value</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">context-param</span>&gt;</span></span><br></pre></td></tr></table></figure></li>
+<li><p>修改 Servlet03 的 doGet 方法，通过 ServletContext 对象操作上下文参数</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Override</span></span><br><span class="line"><span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">doGet</span><span class="params">(HttpServletRequest request, HttpServletResponse response)</span> <span class="keyword">throws</span> ServletException, IOException </span>&#123;</span><br><span class="line">    ServletContext servletContext = getServletContext();</span><br><span class="line"></span><br><span class="line">    System.out.println(<span class="string">&quot;设置域对象：&#123; key: name, value: zhangsan &#125;&quot;</span>);</span><br><span class="line">    servletContext.setAttribute(<span class="string">&quot;name&quot;</span>,<span class="string">&quot;zhangsan&quot;</span>);</span><br><span class="line"></span><br><span class="line">    System.out.println(</span><br><span class="line">        <span class="string">&quot;获取web.xml中配置的上下文参数 key1 的值为：&quot;</span></span><br><span class="line">        + servletContext.getInitParameter(<span class="string">&quot;key1&quot;</span>)</span><br><span class="line">    );</span><br><span class="line"></span><br><span class="line">    System.out.println(<span class="string">&quot;当前的工程路径为：&quot;</span> + servletContext.getContextPath());</span><br><span class="line"></span><br><span class="line">    <span class="comment">// / 斜杠被服务器解析为 http://ip:port/工程名/</span></span><br><span class="line">    System.out.println(<span class="string">&quot;工程的部署路径为：&quot;</span> + servletContext.getRealPath(<span class="string">&quot;/&quot;</span>));</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+<li><p>修改 Servlet02 的 doGet 方法，获取 Servlet03 设置的上下文信息</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Override</span></span><br><span class="line"><span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">doGet</span><span class="params">(HttpServletRequest req, HttpServletResponse resp)</span> <span class="keyword">throws</span> ServletException, IOException </span>&#123;</span><br><span class="line">    System.out.println(<span class="string">&quot;处理 get 请求&quot;</span>);</span><br><span class="line"></span><br><span class="line">    ServletContext servletContext = getServletContext();</span><br><span class="line">    System.out.println(</span><br><span class="line">        <span class="string">&quot;获取 Servlet03 设置的上下文信息 name 的值为：&quot;</span></span><br><span class="line">        + servletContext.getAttribute(<span class="string">&quot;name&quot;</span>)</span><br><span class="line">    );</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+<li><p>开启服务器，访问 /servlet03，查看控制台打印情况：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">设置域对象：&#123; key: name, value: zhangsan &#125;</span><br><span class="line">获取web.xml中配置的上下文参数 key1 的值为：value1</span><br><span class="line">当前的工程路径为：/web_learning</span><br><span class="line">工程的部署路径为：D:\projects\idea\web-learning\out\artifacts\web_learning_war_exploded\</span><br></pre></td></tr></table></figure></li>
+<li><p>再访问 /servlet02，查看控制台打印情况</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">获取 Servlet03 设置的上下文信息 name 的值为：zhangsan</span><br></pre></td></tr></table></figure></li>
+</ul>
+</li>
+</ol>
+
+        </div>
+
+        
+            <section class="post-copyright">
+                
+                    <p class="copyright-item">
+                        <span>Author:</span>
+                        <span>John Doe</span>
+                    </p>
+                
+                
+                    <p class="copyright-item">
+                        <span>Permalink:</span>
+                        <span><a href="http://example.com/2021/05/29/Javaweb02-Servlet/">http://example.com/2021/05/29/Javaweb02-Servlet/</a></span>
+                    </p>
+                
+                
+                    <p class="copyright-item">
+                        <span>License:</span>
+                        <span>Copyright (c) 2019 <a target="_blank" rel="noopener" href="http://creativecommons.org/licenses/by-nc/4.0/">CC-BY-NC-4.0</a> LICENSE</span>
+                    </p>
+                
+                
+                     <p class="copyright-item">
+                         <span>Slogan:</span>
+                         <span>Do you believe in <strong>DESTINY</strong>?</span>
+                     </p>
+                
+
+            </section>
+        
+        <section class="post-tags">
+            <div>
+                <span>Tag(s):</span>
+                <span class="tag">
+                    
+                    
+                        <a href="/tags/JavaWeb/"># JavaWeb</a>
+                    
+                        
+                </span>
+            </div>
+            <div>
+                <a href="javascript:window.history.back();">back</a>
+                <span>· </span>
+                <a href="/">home</a>
+            </div>
+        </section>
+        <section class="post-nav">
+            
+                <a class="prev" rel="prev" href="/2021/05/30/Javaweb03-http/">Javaweb（三） - Servlet 和 HTTP</a>
+            
+            
+            <a class="next" rel="next" href="/2021/05/29/Javaweb01-tomcat/">Javaweb（一） - JavaWeb 简介以及 Tomcat 的使用</a>
+            
+        </section>
+
+
+    </article>
+</div>
+
+        </div>
+        <footer id="footer" class="footer">
+    <div class="copyright">
+        <span>© John Doe | Powered by <a href="https://hexo.io" target="_blank">Hexo</a> & <a href="https://github.com/Siricee/hexo-theme-Chic" target="_blank">Chic</a></span>
+    </div>
+</footer>
+
+    </div>
+</body>
+</html>

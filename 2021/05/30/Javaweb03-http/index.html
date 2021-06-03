@@ -1,0 +1,560 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+    <meta name="author" content="John Doe">
+
+
+
+
+
+<title>Javaweb（三） - Servlet 和 HTTP | Hexo</title>
+
+
+
+    <link rel="icon" href="/favicon.ico">
+
+
+
+
+    <!-- stylesheets list from _config.yml -->
+    
+    <link rel="stylesheet" href="/css/style.css">
+    
+
+
+
+    <!-- scripts list from _config.yml -->
+    
+    <script src="/js/script.js"></script>
+    
+    <script src="/js/tocbot.min.js"></script>
+    
+
+
+
+    
+    
+        
+    
+
+
+<meta name="generator" content="Hexo 5.4.0"></head>
+<body>
+    <div class="wrapper">
+        <header>
+    <nav class="navbar">
+        <div class="container">
+            <div class="navbar-header header-logo"><a href="/">Qiny&#39;s Blog</a></div>
+            <div class="menu navbar-right">
+                
+                    <a class="menu-item" href="/archives">Posts</a>
+                
+                    <a class="menu-item" href="/category">Categories</a>
+                
+                    <a class="menu-item" href="/tag">Tags</a>
+                
+                    <a class="menu-item" href="/about">About</a>
+                
+                <input id="switch_default" type="checkbox" class="switch_default">
+                <label for="switch_default" class="toggleBtn"></label>
+            </div>
+        </div>
+    </nav>
+
+    
+    <nav class="navbar-mobile" id="nav-mobile">
+        <div class="container">
+            <div class="navbar-header">
+                <div>
+                    <a href="/">Qiny&#39;s Blog</a><a id="mobile-toggle-theme">·&nbsp;Light</a>
+                </div>
+                <div class="menu-toggle" onclick="mobileBtn()">&#9776; Menu</div>
+            </div>
+            <div class="menu" id="mobile-menu">
+                
+                    <a class="menu-item" href="/archives">Posts</a>
+                
+                    <a class="menu-item" href="/category">Categories</a>
+                
+                    <a class="menu-item" href="/tag">Tags</a>
+                
+                    <a class="menu-item" href="/about">About</a>
+                
+            </div>
+        </div>
+    </nav>
+
+</header>
+<script>
+    var mobileBtn = function f() {
+        var toggleMenu = document.getElementsByClassName("menu-toggle")[0];
+        var mobileMenu = document.getElementById("mobile-menu");
+        if(toggleMenu.classList.contains("active")){
+           toggleMenu.classList.remove("active")
+            mobileMenu.classList.remove("active")
+        }else{
+            toggleMenu.classList.add("active")
+            mobileMenu.classList.add("active")
+        }
+    }
+</script>
+        <div class="main">
+            <div class="container">
+    
+    
+        <div class="post-toc">
+    <div class="tocbot-list">
+    </div>
+    <div class="tocbot-list-menu">
+        <a class="tocbot-toc-expand" onclick="expand_toc()">Expand all</a>
+        <a onclick="go_top()">Back to top</a>
+        <a onclick="go_bottom()">Go to bottom</a>
+    </div>
+</div>
+
+<script>
+    document.ready(
+        function () {
+            tocbot.init({
+                tocSelector: '.tocbot-list',
+                contentSelector: '.post-content',
+                headingSelector: 'h1, h2, h3, h4, h5',
+                collapseDepth: 1,
+                orderedList: false,
+                scrollSmooth: true,
+            })
+        }
+    )
+
+    function expand_toc() {
+        var b = document.querySelector(".tocbot-toc-expand");
+        tocbot.init({
+            tocSelector: '.tocbot-list',
+            contentSelector: '.post-content',
+            headingSelector: 'h1, h2, h3, h4, h5',
+            collapseDepth: 6,
+            orderedList: false,
+            scrollSmooth: true,
+        });
+        b.setAttribute("onclick", "collapse_toc()");
+        b.innerHTML = "Collapse all"
+    }
+
+    function collapse_toc() {
+        var b = document.querySelector(".tocbot-toc-expand");
+        tocbot.init({
+            tocSelector: '.tocbot-list',
+            contentSelector: '.post-content',
+            headingSelector: 'h1, h2, h3, h4, h5',
+            collapseDepth: 1,
+            orderedList: false,
+            scrollSmooth: true,
+        });
+        b.setAttribute("onclick", "expand_toc()");
+        b.innerHTML = "Expand all"
+    }
+
+    function go_top() {
+        window.scrollTo(0, 0);
+    }
+
+    function go_bottom() {
+        window.scrollTo(0, document.body.scrollHeight);
+    }
+
+</script>
+    
+
+    
+    <article class="post-wrap">
+        <header class="post-header">
+            <h1 class="post-title">Javaweb（三） - Servlet 和 HTTP</h1>
+            
+                <div class="post-meta">
+                    
+                        Author: <a itemprop="author" rel="author" href="/">John Doe</a>
+                    
+
+                    
+                        <span class="post-time">
+                        Date: <a href="#">May 30, 2021&nbsp;&nbsp;14:53:19</a>
+                        </span>
+                    
+                    
+                </div>
+            
+        </header>
+
+        <div class="post-content">
+            <h2 id="Http-协议"><a href="#Http-协议" class="headerlink" title="Http 协议"></a>Http 协议</h2><h3 id="1-什么是-Http-协议"><a href="#1-什么是-Http-协议" class="headerlink" title="1. 什么是 Http 协议"></a>1. 什么是 Http 协议</h3><ul>
+<li><p>什么是协议？协议是指双方或多方相互约定好，大家都需要遵守的规则，叫协议。</p>
+</li>
+<li><p>客户端和服务器之间通信时发送的数据需要遵守的规则，就叫做 Http 协议。</p>
+</li>
+<li><p>Http 协议中的数据又叫报文。</p>
+</li>
+</ul>
+<h3 id="2-请求的-Http-协议格式"><a href="#2-请求的-Http-协议格式" class="headerlink" title="2. 请求的 Http 协议格式"></a>2. 请求的 Http 协议格式</h3><ul>
+<li>客户端给服务器发送的数据叫请求，服务器给客户端回传的数据叫响应。</li>
+<li>请求又分为 GET 请求和 POST 请求两种。</li>
+</ul>
+<ol>
+<li><p>GET请求</p>
+<ul>
+<li>请求行<ul>
+<li>请求的方式    GET</li>
+<li>请求的资源路径 [ + ? + 请求参数]</li>
+<li>请求的协议版本号   HTTP/1.1</li>
+</ul>
+</li>
+<li>请求头：由 key: value 组成，不同的键值对，表示不同的含义。常用的请求头如下：<ul>
+<li>Accept：告诉服务器，客户端可以接收的数据类型</li>
+<li>Accept-Language：告诉服务器客户端可以接收的语言类型。（ zh_CN：中文、en_US：英文……）</li>
+<li>User-Agent：就是浏览器的信息。</li>
+<li>Accept-Encoding：告诉服务器，客户端可以接收的数据编码（压缩）格式</li>
+<li>Host：表示请求的服务器的 ip 和端口号</li>
+<li>Connection：告诉服务器请求连接如何处理（Keep-Alive：告诉服务器回传数据不要马上关闭，保持一小段时间的连接、Closed：马上关闭）</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>POST 请求</p>
+<ul>
+<li><p>请求行</p>
+<ul>
+<li>请求的方式    POST</li>
+<li>请求的资源路径 [ + ? + 请求参数]</li>
+<li>请求的协议版本号   HTTP/1.1</li>
+</ul>
+</li>
+<li><p>请求头：由 key: value 组成，不同的键值对，表示不同的含义。</p>
+<ul>
+<li>Accept、Accept-Language、User-Agent</li>
+<li>Referer：表示请求发起时，浏览器地址栏中的地址（从哪来、可以防止盗链）</li>
+<li>Content-Type：表示发送的数据类型<ul>
+<li>application/x-www-form-urlencoded：表示提交的数据格式是：name=value&amp;name=value，然后对其进行 url 编码（指将非英文内容转换为%xxx%xxx…）。</li>
+<li>multipart/form-data：表示以多段的形式提交数据给服务器（以流的形式，用于上传）</li>
+</ul>
+</li>
+<li>Content-Length：表示发送的数据的长度</li>
+<li>Cache-Control：表示如何控制缓存（例如 no-cache 表示不缓存）</li>
+</ul>
+</li>
+<li><p>空行</p>
+</li>
+<li><p>请求体：就是发送给服务器的数据。</p>
+</li>
+</ul>
+</li>
+<li><p>哪些是 GET 请求，哪些是 POST 请求</p>
+<ul>
+<li>常见的 GET 请求<ol>
+<li>form 标签 method 属性为 get 时</li>
+<li>a 标签</li>
+<li>link 标签引入 css</li>
+<li>script 标签引入 js 文件</li>
+<li>img 标签引入图片</li>
+<li>iframe 引入 html 页面</li>
+<li>在浏览器地址栏中敲入地址后敲回车</li>
+</ol>
+</li>
+<li>常见的 POST 请求<ol>
+<li>form 标签 method 属性为 post 时</li>
+</ol>
+</li>
+</ul>
+</li>
+</ol>
+<h3 id="3-响应的-HTTP-协议格式"><a href="#3-响应的-HTTP-协议格式" class="headerlink" title="3. 响应的 HTTP 协议格式"></a>3. 响应的 HTTP 协议格式</h3><ol>
+<li>响应行<ol>
+<li>响应的协议和版本号 HTTP/1.1</li>
+<li>响应状态码（例如 200）</li>
+<li>响应的状态描述符（例如 ok ）</li>
+</ol>
+</li>
+<li>响应头：由 key: value 组成，不同的键值对，表示不同的含义。<ul>
+<li>Server：表示服务器的信息</li>
+<li>Content-Type：表示响应体的数据类型</li>
+<li>Content-Length：响应体的长度</li>
+<li>Date：请求响应的时间（格林时间）</li>
+</ul>
+</li>
+<li>空行</li>
+<li>响应体：就是回传给客户端的数据</li>
+</ol>
+<h3 id="4-常用的响应码说明"><a href="#4-常用的响应码说明" class="headerlink" title="4. 常用的响应码说明"></a>4. 常用的响应码说明</h3><ul>
+<li><p>200：表示请求成功</p>
+</li>
+<li><p>302：表示请求重定向</p>
+</li>
+<li><p>404：表示请求服务器已经收到了，但是你要的数据不存在（请求地址错误）</p>
+</li>
+<li><p>500：表示服务器已经收到请求，但是服务器内部错误（大多数是代码错误）</p>
+</li>
+</ul>
+<h3 id="5-MIME-类型说明"><a href="#5-MIME-类型说明" class="headerlink" title="5. MIME 类型说明"></a>5. MIME 类型说明</h3><p>MIME 是 HTTP 协议中数据类型。</p>
+<p>MIME 的英文全称是 “ Multipurpose Internet Mail Extensions “ 多功能 Internet 邮件扩充服务，MIME 类型的格式是 “ 大类型/小类型 “，并与某一种文件的扩展名相对应。</p>
+<p>常见的 MIME 类型：</p>
+<table>
+<thead>
+<tr>
+<th>文件</th>
+<th>MIME 类型</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>超文本标记语言文本</td>
+<td>.html .htm          text/html</td>
+</tr>
+<tr>
+<td>普通文本</td>
+<td>.txt          text/plain</td>
+</tr>
+<tr>
+<td>RTF 文本</td>
+<td>.rtf          application/rtf</td>
+</tr>
+<tr>
+<td>GIF 图形</td>
+<td>.gif          image/gif</td>
+</tr>
+<tr>
+<td>JPEG 图形</td>
+<td>.jpeg .jpg          image/jpeg</td>
+</tr>
+<tr>
+<td>au 声音文件</td>
+<td>.au          audio/basic</td>
+</tr>
+<tr>
+<td>MIDI 音乐文件</td>
+<td>.mid .midi          audio/midi, audio/x-midi</td>
+</tr>
+<tr>
+<td>RealAudio 音乐文件</td>
+<td>.ra .ram          audio/x-pn-realaudio</td>
+</tr>
+<tr>
+<td>MPEG 文件</td>
+<td>.mpg .mpeg          video/mpeg</td>
+</tr>
+<tr>
+<td>AVI 文件</td>
+<td>.avi          video/x-msvideo</td>
+</tr>
+<tr>
+<td>GZIP 文件</td>
+<td>.gz          application/x-gzip</td>
+</tr>
+<tr>
+<td>TAR 文件</td>
+<td>.tar          application/x-tar</td>
+</tr>
+</tbody></table>
+<h2 id="Servlet-中关于-HTTP-的操作"><a href="#Servlet-中关于-HTTP-的操作" class="headerlink" title="Servlet 中关于 HTTP 的操作"></a>Servlet 中关于 HTTP 的操作</h2><h3 id="1-HttpServletRequest-类的介绍"><a href="#1-HttpServletRequest-类的介绍" class="headerlink" title="1. HttpServletRequest 类的介绍"></a>1. HttpServletRequest 类的介绍</h3><p>每次只要有请求进入 Tomcat 服务器，Tomcat 服务器就会把请求过来的 HTTP 协议信息解析好封装到 Request 对象中，然后传递到 service （doGet 和 doPost ）中给我们使用。我们可以通过 HttpServletRequest 对象获取到所以请求的信息。</p>
+<h3 id="2-HttpServletRequest-类的常用方法"><a href="#2-HttpServletRequest-类的常用方法" class="headerlink" title="2. HttpServletRequest 类的常用方法"></a>2. HttpServletRequest 类的常用方法</h3><ul>
+<li>getRequestURI()：获取请求的资源路径</li>
+<li>getRequestURL()：获取请求的统一资源定位符（绝对路径）</li>
+<li>getRemoteHost()：获取客户端的 IP 地址</li>
+<li>getHeader()：获取请求头</li>
+<li>getParameter()：获取请求的参数</li>
+<li>getParameterValues()：获取请求的参数（多个值的时候使用）</li>
+<li>getMethod()：获取请求的方式 GET 或 POST</li>
+<li>setAttribute(key, value)：设置域数据</li>
+<li>getAttribute(key)：获取域数据</li>
+<li>getRequestDispatcher()：获取请求转发对象</li>
+</ul>
+<h3 id="3-示例：获取请求的参数值"><a href="#3-示例：获取请求的参数值" class="headerlink" title="3. 示例：获取请求的参数值"></a>3. 示例：获取请求的参数值</h3><ol>
+<li><p>新建 Servlet04 重写 doGet 和 doPost 方法</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">reqHandler</span><span class="params">(HttpServletRequest req)</span> </span>&#123;</span><br><span class="line">    System.out.println(<span class="string">&quot;URI: &quot;</span> + req.getRequestURI());</span><br><span class="line">    System.out.println(<span class="string">&quot;URL: &quot;</span> + req.getRequestURL());</span><br><span class="line">    System.out.println(<span class="string">&quot;Host: &quot;</span> + req.getRemoteHost());</span><br><span class="line">    System.out.println(<span class="string">&quot;Header[\&quot;Content-Type\&quot;]: &quot;</span> + req.getHeader(<span class="string">&quot;Content-Type&quot;</span>));</span><br><span class="line">    System.out.println(<span class="string">&quot;Parameter[\&quot;username\&quot;]: &quot;</span> + req.getParameter(<span class="string">&quot;username&quot;</span>));</span><br><span class="line">    System.out.println(<span class="string">&quot;Parameter[\&quot;password\&quot;]: &quot;</span> + req.getParameter(<span class="string">&quot;password&quot;</span>));</span><br><span class="line"></span><br><span class="line">    System.out.print(<span class="string">&quot;getParameterValues[\&quot;hobby\&quot;]:&quot;</span>);</span><br><span class="line">    String[] hobbies = req.getParameterValues(<span class="string">&quot;hobby&quot;</span>);</span><br><span class="line">    <span class="keyword">if</span> (hobbies != <span class="keyword">null</span>) &#123;</span><br><span class="line">        Arrays.asList(req.getParameterValues(<span class="string">&quot;hobby&quot;</span>)).forEach(hobby -&gt; &#123;</span><br><span class="line">            System.out.print(hobby + <span class="string">&quot; &quot;</span>);</span><br><span class="line">        &#125;);</span><br><span class="line">    &#125;</span><br><span class="line">    System.out.println();</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="meta">@Override</span></span><br><span class="line"><span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">doGet</span><span class="params">(HttpServletRequest req, HttpServletResponse resp)</span> <span class="keyword">throws</span> ServletException, IOException </span>&#123;</span><br><span class="line">    System.out.println(<span class="string">&quot;处理 GET 请求&quot;</span>);</span><br><span class="line">    reqHandler(req);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="meta">@Override</span></span><br><span class="line"><span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">doPost</span><span class="params">(HttpServletRequest req, HttpServletResponse resp)</span> <span class="keyword">throws</span> ServletException, IOException </span>&#123;</span><br><span class="line">    System.out.println(<span class="string">&quot;处理 POST 请求&quot;</span>);</span><br><span class="line">    reqHandler(req);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+<li><p>在展示页面中编写 form 表单</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">&lt;!-- index.jsp --&gt;</span><br><span class="line">&lt;form action=<span class="string">&quot;$&#123;pageContext.request.contextPath&#125;/servlet04&quot;</span> method=<span class="string">&quot;get&quot;</span>&gt;</span><br><span class="line">    测试 servlet04 的 GET 方法&lt;br/&gt;</span><br><span class="line">    用户名: &lt;input type=<span class="string">&quot;text&quot;</span> name=<span class="string">&quot;username&quot;</span>&gt;&lt;br/&gt;</span><br><span class="line">    密码: &lt;input type=<span class="string">&quot;password&quot;</span> name=<span class="string">&quot;password&quot;</span>&gt;&lt;br/&gt;</span><br><span class="line">    &lt;input type=<span class="string">&quot;submit&quot;</span> value=<span class="string">&quot;提交&quot;</span>&gt;</span><br><span class="line">&lt;/form&gt;</span><br></pre></td></tr></table></figure></li>
+<li><p>打开浏览器，访问展示页面输入信息，点击提交，观察控制台的打印情况</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">处理 GET 请求</span><br><span class="line">URI: /web_learning/servlet04</span><br><span class="line">URL: http://localhost:8080/web_learning/servlet04</span><br><span class="line">Host: 0:0:0:0:0:0:0:1</span><br><span class="line">Header[&quot;Content-Type&quot;]: null</span><br><span class="line">Parameter[&quot;username&quot;]: 好耶</span><br><span class="line">Parameter[&quot;password&quot;]: 123456</span><br><span class="line">getParameterValues[&quot;hobby&quot;]:cpp </span><br></pre></td></tr></table></figure></li>
+<li><p>设置提交方式为 post ，更新 resources，再次提交发现 username 变成了乱码</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">处理 POST 请求</span><br><span class="line">URI: /web_learning/servlet04</span><br><span class="line">URL: http://localhost:8080/web_learning/servlet04</span><br><span class="line">Host: 0:0:0:0:0:0:0:1</span><br><span class="line">Header[&quot;Content-Type&quot;]: application/x-www-form-urlencoded</span><br><span class="line">Parameter[&quot;username&quot;]: ???è??</span><br><span class="line">Parameter[&quot;password&quot;]: 123456</span><br><span class="line">getParameterValues[&quot;hobby&quot;]:cpp </span><br></pre></td></tr></table></figure></li>
+<li><p>解决方法：将处理 POST 的请求参数编码设置为 UTF-8</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 这里要抛出异常 UnsupportedEncodingException</span></span><br><span class="line"><span class="keyword">if</span> (req.getMethod().equals(<span class="string">&quot;POST&quot;</span>)) &#123;</span><br><span class="line">    req.setCharacterEncoding(<span class="string">&quot;UTF-8&quot;</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+</ol>
+<p>原因：来自<a target="_blank" rel="noopener" href="https://www.cnblogs.com/niujifei/p/12428034.html">https://www.cnblogs.com/niujifei/p/12428034.html</a></p>
+<ul>
+<li>Get是 URL 解码方式。默认解码格式是 Tomcat8 编码格式。所以URL解码是 UTF-8，覆盖掉了 request 容器解码格式。</li>
+<li>Post 是实体内容解码方式。默认解码格式是request编码格式。与Tomcat8编码格式无关。</li>
+</ul>
+<p>注意点：设置编码格式一定要在获取请求参数之前。比如上述例子中即使是只将 password 这种不需要 UTF-8 解码的请求参数放在设置编码格式的代码之前也会导致设置编码格式失效，username 打印出来依旧是乱码。</p>
+<h3 id="4-请求的转发"><a href="#4-请求的转发" class="headerlink" title="4. 请求的转发"></a>4. 请求的转发</h3><ul>
+<li><p>请求转发是指服务器收到请求后，从一个资源跳转到另一个资源的操作叫做请求转发。</p>
+</li>
+<li><p>请求转发的特点：</p>
+<ol>
+<li>浏览器地址栏没有变化</li>
+<li>他们是一次请求</li>
+<li>他们共享 request 中的数据</li>
+<li>可以转发到 WEB-INF 目录下</li>
+<li>不可以访问 web 工程以外的资源。比如转发路径为百度的地址，它会在转发地址的前面自动添加工程路径，导致 404。</li>
+</ol>
+</li>
+<li><p>示例：一个请求由两个 Servlet 共同设置参数</p>
+<ul>
+<li><p>接收请求的 Servlet 的 doGet 方法</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Override</span></span><br><span class="line"><span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">doGet</span><span class="params">(HttpServletRequest req, HttpServletResponse resp)</span> <span class="keyword">throws</span> ServletException, IOException </span>&#123;</span><br><span class="line">    <span class="comment">// 获取请求的数据</span></span><br><span class="line">    String data = req.getParameter(<span class="string">&quot;data&quot;</span>);</span><br><span class="line">    System.out.println(<span class="string">&quot;请求参数 data = &quot;</span> + data);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 域对象设置 data 属性，在转发时进行传递</span></span><br><span class="line">    req.setAttribute(<span class="string">&quot;data&quot;</span>, data);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 获取请求转发的路径</span></span><br><span class="line">    RequestDispatcher requestDispatcher = req.getRequestDispatcher(<span class="string">&quot;/servlet06&quot;</span>);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 进行请求转发</span></span><br><span class="line">    requestDispatcher.forward(req, resp);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+<li><p>接收转发的 Servlet 的 doGet 方法</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Override</span></span><br><span class="line"><span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">doGet</span><span class="params">(HttpServletRequest req, HttpServletResponse resp)</span> <span class="keyword">throws</span> ServletException, IOException </span>&#123;</span><br><span class="line">    System.out.println(<span class="string">&quot; ---------------------------------------------------- &quot;</span>);</span><br><span class="line">    <span class="comment">// 获取请求的数据</span></span><br><span class="line">    String data = req.getParameter(<span class="string">&quot;data&quot;</span>);</span><br><span class="line">    System.out.println(<span class="string">&quot;获取转发来的请求参数 data = &quot;</span> + data);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+<li><p>编写展示界面，测试请求转发</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&lt;h2&gt;测试请求转发&lt;/h2&gt;</span><br><span class="line">&lt;!-- 请求路径中携带了参数 --&gt;</span><br><span class="line">&lt;a href=&quot;$&#123;pageContext.request.contextPath&#125;/servlet05?data=hello&quot;&gt;转发&lt;/a&gt;</span><br></pre></td></tr></table></figure></li>
+<li><p>启动服务器，打开浏览器，点击转发，查看控制台打印情况</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">请求参数 data = hello</span><br><span class="line"> ---------------------------------------------------- </span><br><span class="line">获取转发来的请求参数 data = hello</span><br></pre></td></tr></table></figure></li>
+</ul>
+</li>
+</ul>
+<h3 id="5-base-标签的作用"><a href="#5-base-标签的作用" class="headerlink" title="5. base 标签的作用"></a>5. base 标签的作用</h3><p>当使用请求转发进行跳转的时候，浏览器地址栏中的地址是请求转发的路径。</p>
+<p>此时如果转发到一个页面中，它获取资源的相对路径的参照是地址栏中的路径，与工程文件的路径不一致，在请求资源时容易出现资源找不到的问题。</p>
+<p>这时就需要一个正确的参照，去访问工程中的资源。base 标签就可以设置当前页面中所有相对路径工作时，参照那个路径来进行跳转。</p>
+<h3 id="6-WEB-中的资源访问"><a href="#6-WEB-中的资源访问" class="headerlink" title="6. WEB 中的资源访问"></a>6. WEB 中的资源访问</h3><ul>
+<li><p>相对路径</p>
+<p><code>.</code> 表示当前目录</p>
+<p><code>..</code>表示上一级目录</p>
+<p><code>资源名</code> 表示当前文件下的资源名</p>
+</li>
+<li><p>绝对路径：<code>http://ip:port/工程名/资源路径</code></p>
+</li>
+</ul>
+<ul>
+<li><p>WEB 中斜杠 <code>/</code> 的不同含义</p>
+<p>在 WEB 中斜杠 <code>/</code> 是一种绝对路径</p>
+<ul>
+<li>斜杠 <code>/</code> 如果被浏览器解析，得到的地址是：<code>http://ip:port/</code><ul>
+<li>&lt;a href=”/“&gt;斜杠&lt;/a&gt;</li>
+</ul>
+</li>
+<li>斜杠 <code>/</code> 如果被服务器解析，得到的地址是：<code>http://ip:port/工程路径</code><ul>
+<li>&lt;url-parttern&gt;/servlet1&lt;url-parttern&gt;</li>
+<li>servletContext.getRealPath(“/“);</li>
+<li>request.getRequestDispatcher(“/“);</li>
+</ul>
+</li>
+<li>特殊情况——重定向：response.sendRedirect(“/”); 把斜杠发送给浏览器解析，得到<code>http://ip:port/</code></li>
+</ul>
+</li>
+</ul>
+<h3 id="7-HttpServletResponse-类"><a href="#7-HttpServletResponse-类" class="headerlink" title="7. HttpServletResponse 类"></a>7. HttpServletResponse 类</h3><h4 id="7-1-HttpServletResponse-类的作用"><a href="#7-1-HttpServletResponse-类的作用" class="headerlink" title="7.1 HttpServletResponse 类的作用"></a>7.1 HttpServletResponse 类的作用</h4><p>HttpServletResonse 类和 HttpServletRequest 类一样。每次请求进来，Tomcat服务器都会创建一个 Response 对象传递给 Servlet 程序去使用。HttpServletRequest 表示请求过来的信息，HttpServletResponse 表示所有响应的信息。</p>
+<p>我们如果需要设置返回给客户端的信息，就可以通过 HttpServletResponse 对象进行设置</p>
+<h4 id="7-2-两个输出流的说明"><a href="#7-2-两个输出流的说明" class="headerlink" title="7.2 两个输出流的说明"></a>7.2 两个输出流的说明</h4><table>
+<thead>
+<tr>
+<th></th>
+<th></th>
+<th></th>
+</tr>
+</thead>
+<tbody><tr>
+<td>字节流</td>
+<td>getOutputStream()</td>
+<td>常用于下载（传递二进制数据）</td>
+</tr>
+<tr>
+<td>字符流</td>
+<td>getWriter()</td>
+<td>常用于回传字符串（常用）</td>
+</tr>
+</tbody></table>
+<p>两个流同时只能使用一个。</p>
+<p>使用了字节流，就不能再使用字符流，反之亦然，否则就会报错。</p>
+<h4 id="7-3-往客户端回传数据以及回传中文数据乱码的解决方案"><a href="#7-3-往客户端回传数据以及回传中文数据乱码的解决方案" class="headerlink" title="7.3 往客户端回传数据以及回传中文数据乱码的解决方案"></a>7.3 往客户端回传数据以及回传中文数据乱码的解决方案</h4><ol>
+<li><p>第一种方案</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 此方法一定要在获取流对象之前调用才有效</span></span><br><span class="line">resp.setCharacterEncoding(<span class="string">&quot;UTF-8&quot;</span>);<span class="comment">// 设置服务器编码的字符集</span></span><br><span class="line">resp.setHeader(<span class="string">&quot;Content-Type&quot;</span>,<span class="string">&quot;text/plain;charset=UTF-8&quot;</span>);<span class="comment">// 告诉浏览器要解码的字符集</span></span><br><span class="line"></span><br><span class="line">PrintWriter writer = resp.getWriter();</span><br><span class="line">writer.write(<span class="string">&quot;response content!!&quot;</span>);</span><br><span class="line">writer.write(<span class="string">&quot;返回数据!!&quot;</span>);</span><br></pre></td></tr></table></figure></li>
+<li><p>第二种方案</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 此方法一定要在获取流对象之前调用才有效</span></span><br><span class="line"><span class="comment">// 同时设置客户端和服务器编码解码所使用的字符集</span></span><br><span class="line">resp.setContentType(<span class="string">&quot;text/plain;charset=UTF-8&quot;</span>);</span><br><span class="line"></span><br><span class="line">PrintWriter writer = resp.getWriter();</span><br><span class="line">writer.write(<span class="string">&quot;response content!!&quot;</span>);</span><br><span class="line">writer.write(<span class="string">&quot;返回数据!!&quot;</span>);</span><br></pre></td></tr></table></figure></li>
+</ol>
+<h3 id="8-请求重定向"><a href="#8-请求重定向" class="headerlink" title="8. 请求重定向"></a>8. 请求重定向</h3><ul>
+<li><p>请求重定向，是指客户端给服务器发请求，然后服务器告诉客户端说，我给你一些一直，你去新地址访问，叫请求重定向。</p>
+</li>
+<li><p>请求重定向的特点：</p>
+<ol>
+<li>浏览器地址栏会发生变化</li>
+<li>两次请求</li>
+<li>不共享 Request 域中的数据</li>
+<li>不能访问 WEB-INF 下的资源</li>
+<li>可以访问工程外的资源</li>
+</ol>
+</li>
+<li><p>示例：演示请求重定向</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Servlet07 的 doGet()</span></span><br><span class="line">System.out.println(<span class="string">&quot;请求重定向&quot;</span>);</span><br><span class="line"><span class="comment">// 设置 Request 域数据，验证请求转发时两个 Servlet 是否共享这个数据</span></span><br><span class="line">req.setAttribute(<span class="string">&quot;name&quot;</span>, <span class="string">&quot;zhangsan&quot;</span>);</span><br><span class="line"><span class="comment">// 设置响应状态码，表示重定向（已搬迁）</span></span><br><span class="line">resp.setStatus(<span class="number">302</span>);</span><br><span class="line">resp.setHeader(<span class="string">&quot;Location&quot;</span>, <span class="string">&quot;/web_learning/servlet08&quot;</span>);</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">// Servlet08 的 doGet()</span></span><br><span class="line">System.out.println(<span class="string">&quot;收到重定向而来的请求&quot;</span>);</span><br><span class="line">System.out.println(<span class="string">&quot;request attribute [ \&quot;name\&quot; ] : &quot;</span> + req.getAttribute(<span class="string">&quot;name&quot;</span>));</span><br><span class="line"></span><br><span class="line"><span class="comment">// 浏览器响应时控制台的打印结果</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 请求重定向</span></span><br><span class="line"><span class="comment">// 收到重定向而来的请求</span></span><br><span class="line"><span class="comment">// request attribute [ &quot;name&quot; ] : null</span></span><br></pre></td></tr></table></figure></li>
+<li><p>请求重定向的第二种方案（推荐使用）</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">resp.sendRedirect(<span class="string">&quot;/web_learning/servlet08&quot;</span>);</span><br></pre></td></tr></table></figure></li>
+</ul>
+
+        </div>
+
+        
+            <section class="post-copyright">
+                
+                    <p class="copyright-item">
+                        <span>Author:</span>
+                        <span>John Doe</span>
+                    </p>
+                
+                
+                    <p class="copyright-item">
+                        <span>Permalink:</span>
+                        <span><a href="http://example.com/2021/05/30/Javaweb03-http/">http://example.com/2021/05/30/Javaweb03-http/</a></span>
+                    </p>
+                
+                
+                    <p class="copyright-item">
+                        <span>License:</span>
+                        <span>Copyright (c) 2019 <a target="_blank" rel="noopener" href="http://creativecommons.org/licenses/by-nc/4.0/">CC-BY-NC-4.0</a> LICENSE</span>
+                    </p>
+                
+                
+                     <p class="copyright-item">
+                         <span>Slogan:</span>
+                         <span>Do you believe in <strong>DESTINY</strong>?</span>
+                     </p>
+                
+
+            </section>
+        
+        <section class="post-tags">
+            <div>
+                <span>Tag(s):</span>
+                <span class="tag">
+                    
+                    
+                        <a href="/tags/JavaWeb/"># JavaWeb</a>
+                    
+                        
+                </span>
+            </div>
+            <div>
+                <a href="javascript:window.history.back();">back</a>
+                <span>· </span>
+                <a href="/">home</a>
+            </div>
+        </section>
+        <section class="post-nav">
+            
+            
+            <a class="next" rel="next" href="/2021/05/29/Javaweb02-Servlet/">Javaweb（二） - Servlet 入门</a>
+            
+        </section>
+
+
+    </article>
+</div>
+
+        </div>
+        <footer id="footer" class="footer">
+    <div class="copyright">
+        <span>© John Doe | Powered by <a href="https://hexo.io" target="_blank">Hexo</a> & <a href="https://github.com/Siricee/hexo-theme-Chic" target="_blank">Chic</a></span>
+    </div>
+</footer>
+
+    </div>
+</body>
+</html>

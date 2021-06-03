@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+    <meta name="author" content="John Doe">
+
+
+
+
+
+<title>C++面向对象（二）C++对象模型和this指针 | Hexo</title>
+
+
+
+    <link rel="icon" href="/favicon.ico">
+
+
+
+
+    <!-- stylesheets list from _config.yml -->
+    
+    <link rel="stylesheet" href="/css/style.css">
+    
+
+
+
+    <!-- scripts list from _config.yml -->
+    
+    <script src="/js/script.js"></script>
+    
+    <script src="/js/tocbot.min.js"></script>
+    
+
+
+
+    
+    
+        
+    
+
+
+<meta name="generator" content="Hexo 5.4.0"></head>
+<body>
+    <div class="wrapper">
+        <header>
+    <nav class="navbar">
+        <div class="container">
+            <div class="navbar-header header-logo"><a href="/">Qiny&#39;s Blog</a></div>
+            <div class="menu navbar-right">
+                
+                    <a class="menu-item" href="/archives">Posts</a>
+                
+                    <a class="menu-item" href="/category">Categories</a>
+                
+                    <a class="menu-item" href="/tag">Tags</a>
+                
+                    <a class="menu-item" href="/about">About</a>
+                
+                <input id="switch_default" type="checkbox" class="switch_default">
+                <label for="switch_default" class="toggleBtn"></label>
+            </div>
+        </div>
+    </nav>
+
+    
+    <nav class="navbar-mobile" id="nav-mobile">
+        <div class="container">
+            <div class="navbar-header">
+                <div>
+                    <a href="/">Qiny&#39;s Blog</a><a id="mobile-toggle-theme">·&nbsp;Light</a>
+                </div>
+                <div class="menu-toggle" onclick="mobileBtn()">&#9776; Menu</div>
+            </div>
+            <div class="menu" id="mobile-menu">
+                
+                    <a class="menu-item" href="/archives">Posts</a>
+                
+                    <a class="menu-item" href="/category">Categories</a>
+                
+                    <a class="menu-item" href="/tag">Tags</a>
+                
+                    <a class="menu-item" href="/about">About</a>
+                
+            </div>
+        </div>
+    </nav>
+
+</header>
+<script>
+    var mobileBtn = function f() {
+        var toggleMenu = document.getElementsByClassName("menu-toggle")[0];
+        var mobileMenu = document.getElementById("mobile-menu");
+        if(toggleMenu.classList.contains("active")){
+           toggleMenu.classList.remove("active")
+            mobileMenu.classList.remove("active")
+        }else{
+            toggleMenu.classList.add("active")
+            mobileMenu.classList.add("active")
+        }
+    }
+</script>
+        <div class="main">
+            <div class="container">
+    
+    
+        <div class="post-toc">
+    <div class="tocbot-list">
+    </div>
+    <div class="tocbot-list-menu">
+        <a class="tocbot-toc-expand" onclick="expand_toc()">Expand all</a>
+        <a onclick="go_top()">Back to top</a>
+        <a onclick="go_bottom()">Go to bottom</a>
+    </div>
+</div>
+
+<script>
+    document.ready(
+        function () {
+            tocbot.init({
+                tocSelector: '.tocbot-list',
+                contentSelector: '.post-content',
+                headingSelector: 'h1, h2, h3, h4, h5',
+                collapseDepth: 1,
+                orderedList: false,
+                scrollSmooth: true,
+            })
+        }
+    )
+
+    function expand_toc() {
+        var b = document.querySelector(".tocbot-toc-expand");
+        tocbot.init({
+            tocSelector: '.tocbot-list',
+            contentSelector: '.post-content',
+            headingSelector: 'h1, h2, h3, h4, h5',
+            collapseDepth: 6,
+            orderedList: false,
+            scrollSmooth: true,
+        });
+        b.setAttribute("onclick", "collapse_toc()");
+        b.innerHTML = "Collapse all"
+    }
+
+    function collapse_toc() {
+        var b = document.querySelector(".tocbot-toc-expand");
+        tocbot.init({
+            tocSelector: '.tocbot-list',
+            contentSelector: '.post-content',
+            headingSelector: 'h1, h2, h3, h4, h5',
+            collapseDepth: 1,
+            orderedList: false,
+            scrollSmooth: true,
+        });
+        b.setAttribute("onclick", "expand_toc()");
+        b.innerHTML = "Expand all"
+    }
+
+    function go_top() {
+        window.scrollTo(0, 0);
+    }
+
+    function go_bottom() {
+        window.scrollTo(0, document.body.scrollHeight);
+    }
+
+</script>
+    
+
+    
+    <article class="post-wrap">
+        <header class="post-header">
+            <h1 class="post-title">C++面向对象（二）C++对象模型和this指针</h1>
+            
+                <div class="post-meta">
+                    
+                        Author: <a itemprop="author" rel="author" href="/">John Doe</a>
+                    
+
+                    
+                        <span class="post-time">
+                        Date: <a href="#">May 2, 2021&nbsp;&nbsp;2:21:23</a>
+                        </span>
+                    
+                    
+                </div>
+            
+        </header>
+
+        <div class="post-content">
+            <h2 id="C-对象模型和this指针"><a href="#C-对象模型和this指针" class="headerlink" title="C++对象模型和this指针"></a>C++对象模型和this指针</h2><h3 id="1-成员变量和成员函数分开存储"><a href="#1-成员变量和成员函数分开存储" class="headerlink" title="1. 成员变量和成员函数分开存储"></a>1. 成员变量和成员函数分开存储</h3><p>在C++中，类内的成员变量和成员函数分开存储</p>
+<p>只有非静态成员变量才属于类的对象上</p>
+<p>空对象占用内存空间为：1</p>
+<p>C++编译器会给每个空对象也分配一个字节空间，是为了区分空对象占内存的位置</p>
+<p>每个空对象也应该有一个独一无二的内存地址</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Person</span> &#123;</span></span><br><span class="line">    </span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="2-this指针概念"><a href="#2-this指针概念" class="headerlink" title="2. this指针概念"></a>2. this指针概念</h3><p>通过 4.3.1 我们只带在C++中成员变量和成员函数是分开存储的</p>
+<p>每一个非静态成员函数只会诞生一份函数实例，爷就是说多个同类型的对象会共用一块代码</p>
+<p>那么问题是：这一块代码是如果区分哪个对象调用自己的呢？</p>
+<p>C++通过提供特殊的对象指针，this指针，解决上述问题。this指针指向被调用的成员函数所属的对象</p>
+<p>this指针是隐含每一个非静态成员函数内的一种指针</p>
+<p>this指针不需要定义，直接使用即可</p>
+<p>this指针的用途：</p>
+<ul>
+<li>当形参和成员变量同名时，可以this指针区分</li>
+<li>在类的非静态成员函数中返回对象本身，可用return *this</li>
+</ul>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">Person&amp; <span class="title">addAge</span><span class="params">(<span class="keyword">int</span> age)</span> </span>&#123;</span><br><span class="line">    <span class="comment">// 为什么要使用引用作为函数的返回值？</span></span><br><span class="line">    <span class="comment">// 因为如果使用值传递的方式，就会调用Person的拷贝构造函数</span></span><br><span class="line">    <span class="comment">// 这时返回的就不是对象本身了，而是对象的复制</span></span><br><span class="line">    m_Age += age;</span><br><span class="line">    <span class="keyword">return</span> *<span class="keyword">this</span>;<span class="comment">// 返回对象本身之后，这个函数就可以支持链式调用</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">Person p1 = <span class="number">10</span>;</span><br><span class="line">p1.<span class="built_in">addAge</span>(<span class="number">1</span>).<span class="built_in">addAge</span>(<span class="number">2</span>).<span class="built_in">addAge</span>(<span class="number">3</span>);</span><br><span class="line">cout &lt;&lt; p1.m_Age &lt;&lt; endl;<span class="comment">// 16</span></span><br></pre></td></tr></table></figure>
+
+
+
+
+
+<h3 id="3-空指针访问成员函数"><a href="#3-空指针访问成员函数" class="headerlink" title="3. 空指针访问成员函数"></a>3. 空指针访问成员函数</h3><p>C++中空指针也是可以调用成员函数的，但是也要注意有没有用到this指针</p>
+<p>如果用到this指针，需要加以判断包中代码的健壮性</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">string <span class="title">Person::getName</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span>(<span class="keyword">this</span> == <span class="literal">nullptr</span>) &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="string">&quot;this指针为空&quot;</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">this</span>-&gt;name;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">Person p1 = <span class="string">&quot;张三&quot;</span>;</span><br><span class="line"></span><br><span class="line">Person* p2 = &amp;p1;</span><br><span class="line">cout &lt;&lt; p2-&gt;<span class="built_in">getName</span>() &lt;&lt; endl;</span><br><span class="line"><span class="comment">// 张三</span></span><br><span class="line"></span><br><span class="line">p2 = <span class="literal">NULL</span>;</span><br><span class="line">cout &lt;&lt; p2-&gt;<span class="built_in">getName</span>() &lt;&lt; endl;</span><br><span class="line"><span class="comment">// this指针为空</span></span><br></pre></td></tr></table></figure>
+
+
+
+
+
+<h3 id="4-const修饰成员函数"><a href="#4-const修饰成员函数" class="headerlink" title="4. const修饰成员函数"></a>4. const修饰成员函数</h3><p>常函数：</p>
+<ul>
+<li>成员函数后加const后我们称这个函数为常函数</li>
+<li>常函数内不可以修改成员属性</li>
+<li>常用属性声明时加关键字mutable后，在常函数和常对象中依然可以修改</li>
+</ul>
+<p>常对象：</p>
+<ul>
+<li>声明对象前加const称该对象为常对象</li>
+<li>常对象只能调用常函数</li>
+</ul>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// this指针的本质是指针常量，指针的指向是不可以修改的</span></span><br><span class="line"><span class="comment">// 相当于 Person * const this;</span></span><br><span class="line"><span class="comment">// 比如函数里 this = NULL; 就是不允许的操作</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 但是如果要限制 this 不能修改成员变量的值</span></span><br><span class="line"><span class="comment">// 相当于 const Person * const this;</span></span><br><span class="line"><span class="comment">// 那么就需要将成员函数声明为常函数</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">Person::func1</span><span class="params">()</span> <span class="keyword">const</span> </span>&#123;</span><br><span class="line">    <span class="comment">// 常函数下以下两个代码是不能通过编译的</span></span><br><span class="line">    m_Age = <span class="number">100</span>;</span><br><span class="line">    <span class="keyword">this</span>-&gt;m_Age = <span class="number">100</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 当然如果用mutable修饰成员变量时，常函数就能够修改这个变量的值</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Person</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="keyword">mutable</span> <span class="keyword">int</span> m_Age;</span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">setAge</span><span class="params">()</span> <span class="keyword">const</span></span>;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">Person::setAge</span><span class="params">()</span> <span class="keyword">const</span> </span>&#123;</span><br><span class="line">    <span class="comment">// 用mutable修饰的成员变量可以被常函数修改</span></span><br><span class="line">    m_Age = <span class="number">100</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+
+        </div>
+
+        
+            <section class="post-copyright">
+                
+                    <p class="copyright-item">
+                        <span>Author:</span>
+                        <span>John Doe</span>
+                    </p>
+                
+                
+                    <p class="copyright-item">
+                        <span>Permalink:</span>
+                        <span><a href="http://example.com/2021/05/02/cpp-oop02/">http://example.com/2021/05/02/cpp-oop02/</a></span>
+                    </p>
+                
+                
+                    <p class="copyright-item">
+                        <span>License:</span>
+                        <span>Copyright (c) 2019 <a target="_blank" rel="noopener" href="http://creativecommons.org/licenses/by-nc/4.0/">CC-BY-NC-4.0</a> LICENSE</span>
+                    </p>
+                
+                
+                     <p class="copyright-item">
+                         <span>Slogan:</span>
+                         <span>Do you believe in <strong>DESTINY</strong>?</span>
+                     </p>
+                
+
+            </section>
+        
+        <section class="post-tags">
+            <div>
+                <span>Tag(s):</span>
+                <span class="tag">
+                    
+                    
+                        <a href="/tags/C-%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1/"># C++面向对象</a>
+                    
+                        
+                </span>
+            </div>
+            <div>
+                <a href="javascript:window.history.back();">back</a>
+                <span>· </span>
+                <a href="/">home</a>
+            </div>
+        </section>
+        <section class="post-nav">
+            
+                <a class="prev" rel="prev" href="/2021/05/02/cpp-oop03/">C++面向对象（三）友元&运算符重载</a>
+            
+            
+            <a class="next" rel="next" href="/2021/05/02/cpp-oop01/">C++面向对象（一）封装&对象的初始化和清理</a>
+            
+        </section>
+
+
+    </article>
+</div>
+
+        </div>
+        <footer id="footer" class="footer">
+    <div class="copyright">
+        <span>© John Doe | Powered by <a href="https://hexo.io" target="_blank">Hexo</a> & <a href="https://github.com/Siricee/hexo-theme-Chic" target="_blank">Chic</a></span>
+    </div>
+</footer>
+
+    </div>
+</body>
+</html>

@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+    <meta name="author" content="John Doe">
+
+
+
+
+
+<title>Javaweb（一） - JavaWeb 简介以及 Tomcat 的使用 | Hexo</title>
+
+
+
+    <link rel="icon" href="/favicon.ico">
+
+
+
+
+    <!-- stylesheets list from _config.yml -->
+    
+    <link rel="stylesheet" href="/css/style.css">
+    
+
+
+
+    <!-- scripts list from _config.yml -->
+    
+    <script src="/js/script.js"></script>
+    
+    <script src="/js/tocbot.min.js"></script>
+    
+
+
+
+    
+    
+        
+    
+
+
+<meta name="generator" content="Hexo 5.4.0"></head>
+<body>
+    <div class="wrapper">
+        <header>
+    <nav class="navbar">
+        <div class="container">
+            <div class="navbar-header header-logo"><a href="/">Qiny&#39;s Blog</a></div>
+            <div class="menu navbar-right">
+                
+                    <a class="menu-item" href="/archives">Posts</a>
+                
+                    <a class="menu-item" href="/category">Categories</a>
+                
+                    <a class="menu-item" href="/tag">Tags</a>
+                
+                    <a class="menu-item" href="/about">About</a>
+                
+                <input id="switch_default" type="checkbox" class="switch_default">
+                <label for="switch_default" class="toggleBtn"></label>
+            </div>
+        </div>
+    </nav>
+
+    
+    <nav class="navbar-mobile" id="nav-mobile">
+        <div class="container">
+            <div class="navbar-header">
+                <div>
+                    <a href="/">Qiny&#39;s Blog</a><a id="mobile-toggle-theme">·&nbsp;Light</a>
+                </div>
+                <div class="menu-toggle" onclick="mobileBtn()">&#9776; Menu</div>
+            </div>
+            <div class="menu" id="mobile-menu">
+                
+                    <a class="menu-item" href="/archives">Posts</a>
+                
+                    <a class="menu-item" href="/category">Categories</a>
+                
+                    <a class="menu-item" href="/tag">Tags</a>
+                
+                    <a class="menu-item" href="/about">About</a>
+                
+            </div>
+        </div>
+    </nav>
+
+</header>
+<script>
+    var mobileBtn = function f() {
+        var toggleMenu = document.getElementsByClassName("menu-toggle")[0];
+        var mobileMenu = document.getElementById("mobile-menu");
+        if(toggleMenu.classList.contains("active")){
+           toggleMenu.classList.remove("active")
+            mobileMenu.classList.remove("active")
+        }else{
+            toggleMenu.classList.add("active")
+            mobileMenu.classList.add("active")
+        }
+    }
+</script>
+        <div class="main">
+            <div class="container">
+    
+    
+        <div class="post-toc">
+    <div class="tocbot-list">
+    </div>
+    <div class="tocbot-list-menu">
+        <a class="tocbot-toc-expand" onclick="expand_toc()">Expand all</a>
+        <a onclick="go_top()">Back to top</a>
+        <a onclick="go_bottom()">Go to bottom</a>
+    </div>
+</div>
+
+<script>
+    document.ready(
+        function () {
+            tocbot.init({
+                tocSelector: '.tocbot-list',
+                contentSelector: '.post-content',
+                headingSelector: 'h1, h2, h3, h4, h5',
+                collapseDepth: 1,
+                orderedList: false,
+                scrollSmooth: true,
+            })
+        }
+    )
+
+    function expand_toc() {
+        var b = document.querySelector(".tocbot-toc-expand");
+        tocbot.init({
+            tocSelector: '.tocbot-list',
+            contentSelector: '.post-content',
+            headingSelector: 'h1, h2, h3, h4, h5',
+            collapseDepth: 6,
+            orderedList: false,
+            scrollSmooth: true,
+        });
+        b.setAttribute("onclick", "collapse_toc()");
+        b.innerHTML = "Collapse all"
+    }
+
+    function collapse_toc() {
+        var b = document.querySelector(".tocbot-toc-expand");
+        tocbot.init({
+            tocSelector: '.tocbot-list',
+            contentSelector: '.post-content',
+            headingSelector: 'h1, h2, h3, h4, h5',
+            collapseDepth: 1,
+            orderedList: false,
+            scrollSmooth: true,
+        });
+        b.setAttribute("onclick", "expand_toc()");
+        b.innerHTML = "Expand all"
+    }
+
+    function go_top() {
+        window.scrollTo(0, 0);
+    }
+
+    function go_bottom() {
+        window.scrollTo(0, document.body.scrollHeight);
+    }
+
+</script>
+    
+
+    
+    <article class="post-wrap">
+        <header class="post-header">
+            <h1 class="post-title">Javaweb（一） - JavaWeb 简介以及 Tomcat 的使用</h1>
+            
+                <div class="post-meta">
+                    
+                        Author: <a itemprop="author" rel="author" href="/">John Doe</a>
+                    
+
+                    
+                        <span class="post-time">
+                        Date: <a href="#">May 29, 2021&nbsp;&nbsp;2:52:21</a>
+                        </span>
+                    
+                    
+                </div>
+            
+        </header>
+
+        <div class="post-content">
+            <h2 id="1-JavaWeb-的概念"><a href="#1-JavaWeb-的概念" class="headerlink" title="1 JavaWeb 的概念"></a>1 JavaWeb 的概念</h2><ol>
+<li><p>什么是 JavaWeb</p>
+<p>JavaWeb是指，所有通过 Java 语言编写可以通过浏览器访问的程序的总称，叫 Javaweb。</p>
+<p>JawaWeb是基于请求和响应来开发的。</p>
+</li>
+<li><p>什么是请求？</p>
+<p>请求是指客户端给服务器发送的数据，叫请求。 <strong>Request</strong></p>
+</li>
+<li><p>什么是响应？</p>
+<p>响应是指服务器给客户端回传数据，叫响应。 <strong>Response</strong></p>
+</li>
+<li><p>请求和响应的关系</p>
+<p>请求和响应式成对出现的，有请求就有响应。</p>
+</li>
+</ol>
+<h2 id="2-Web-资源的分类"><a href="#2-Web-资源的分类" class="headerlink" title="2 Web 资源的分类"></a>2 Web 资源的分类</h2><p>web资源按实现的技术和呈现的效果的不同，又分为静态资源和动态资源两种。</p>
+<ul>
+<li>静态资源：html、css、js、txt、 mp4视频,，jpg 图片。</li>
+<li>动态资源：jsp页面、Serviet程序。</li>
+</ul>
+<h2 id="3-常用的-Web-服务器"><a href="#3-常用的-Web-服务器" class="headerlink" title="3 常用的 Web 服务器"></a>3 常用的 Web 服务器</h2><p>Tomcat：由 Apache 组织的一种 Web 服务器，提供对 JSP 和 Servlet 的支持。他是一种轻量级的 JavaWeb 容器（服务器），也是当前应用最广泛的 JavaWeb 服务器（免费）。</p>
+<p>Jboss：是一个遵从 JavaEE 规范的、开放源代码的、纯 java 的 EJB 服务器，它支持所有的 JavaEE规范（免费）。</p>
+<p>GlassFish：由 Oracle 公司开发的一款 JavaWeb 服务器，是一款强健的商业服务器，达到产品级质量（应用很少）。</p>
+<p>Resin：是CAUCHO公司的产品，是一个非常流行的服务器，对 Servlet 和 JSP 提供了良好的支持，性能也比较优良，resin 自身采用 Java 语言开发（收费，应用比较多）</p>
+<p>webLogic：是 Oracle 公司的产品，是目前应用最广泛的 Web 服务器，支持 JavaEE 规范，而且不断的完善以适应新的开发要求，适含大型项目（收费，用的不多，适合大公司）。</p>
+<h2 id="4-Tomcat-的使用"><a href="#4-Tomcat-的使用" class="headerlink" title="4 Tomcat 的使用"></a>4 Tomcat 的使用</h2><h3 id="4-1-安装"><a href="#4-1-安装" class="headerlink" title="4.1 安装"></a>4.1 安装</h3><p>找到需要用的 Tomcat 版本对应的 zip 压缩包，解压到需要安装的目录即可。</p>
+<h3 id="4-2-目录介绍"><a href="#4-2-目录介绍" class="headerlink" title="4.2 目录介绍"></a>4.2 目录介绍</h3><ul>
+<li><strong>bin</strong> 专门用来存放 Tomcat 服务器的可执行程序。</li>
+<li><strong>conf</strong> 专门用来存放 Tomcat 服务器的配置文件。</li>
+<li><strong>lib</strong> 专门用来存放 Tomcat 服务器的 jar 包。</li>
+<li><strong>logs</strong> 专门用来存放 Tomcat 服务器运行时输出的日志信息。</li>
+<li><strong>temp</strong> 专门用来存放 Tomcat 服务器运行时产生的临时数据。</li>
+<li><strong>webapps</strong> 专门用来存放部署的 web 工程。</li>
+<li><strong>work</strong> 是 Tomcat 工作时的目录，用来存放 Tomcat 运行时 jsp 翻译为 Servlet 的源码，和 Session 钝化的目录。</li>
+</ul>
+<h3 id="4-3-启动服务器"><a href="#4-3-启动服务器" class="headerlink" title="4.3 启动服务器"></a>4.3 启动服务器</h3><p>找到 Tomcat 目录下的 bin 目录下的 startup.bat 文件，双击，就可以启动 Tomcat 服务器。</p>
+<p>如何测试 Tomcat 服务器启动成功？</p>
+<p>打开浏览器，在浏览器地址栏中输入一下地址测试：</p>
+<ol>
+<li><a target="_blank" rel="noopener" href="http://localhost:8080/">http://localhost:8080</a></li>
+<li><a target="_blank" rel="noopener" href="http://127.0.0.1:8080/">http://127.0.0.1:8080</a></li>
+<li>http://真实ip:8080</li>
+</ol>
+<p> 当出现 Tomcat 的启动界面时，说明启动成功。</p>
+<p>常见的启动失败的情况有：双击 startup.bat 文件，就会出现一个小黑窗口一闪而过。</p>
+<p>这个时候，失败的原因基本上都是因为没有配置好JAVA_HOME 环境变量。常见的JAVA_HOME 配置错误有以下几种情况：</p>
+<ol>
+<li>JAVA_HOME 必须全部大写。</li>
+<li>JAVA_HOME 中间必须是下划线，不是减号。</li>
+<li>JAVA_HOME 配置的路径只需要配置到 jdk 的安装目录即可，不需要带上 bin 目录。</li>
+</ol>
+<p>另一种启动 Tomcat 服务器的方式：使用命令行。</p>
+<ol>
+<li>打开命令行</li>
+<li>cd 到 Tomcat 的 bin 目录下</li>
+<li>敲入启动命令：catalina run</li>
+</ol>
+<h3 id="4-4-停止服务器"><a href="#4-4-停止服务器" class="headerlink" title="4.4 停止服务器"></a>4.4 停止服务器</h3><ol>
+<li>点击服务器窗口的关闭按钮</li>
+<li>把 Tomcat 服务器窗口设置为当前窗口，然后按 ctrl+c</li>
+<li>找到 Tomcat 的 bin 目录下的 shutdown.bat 双击，就可以停止 Tomcat 服务器</li>
+</ol>
+<h3 id="4-5-修改端口号"><a href="#4-5-修改端口号" class="headerlink" title="4.5 修改端口号"></a>4.5 修改端口号</h3><p>Mysql 的默认端口是 3306</p>
+<p>Tomcat 的默认端口是 8080</p>
+<p>找到 Tomcat 目录下的 conf 目录，找到 server.xml 配置文件。</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">&lt;!-- 找到如下标签，并将 port 属性改为自定义的端口号 --&gt;</span></span><br><span class="line"><span class="comment">&lt;!-- 修改范围为 1 ~ 65535，一般选择 8000 以上的（1000以内是系统要用的端口） --&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">Connector</span> <span class="attr">executor</span>=<span class="string">&quot;tomcatThreadPool&quot;</span></span></span><br><span class="line"><span class="tag">           <span class="attr">port</span>=<span class="string">&quot;8080&quot;</span> <span class="attr">protocol</span>=<span class="string">&quot;HTTP/1.1&quot;</span></span></span><br><span class="line"><span class="tag">           <span class="attr">connectionTimeout</span>=<span class="string">&quot;20000&quot;</span></span></span><br><span class="line"><span class="tag">           <span class="attr">redirectPort</span>=<span class="string">&quot;8443&quot;</span> /&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p><strong>修改完端口号，一定要重启 Tomcat 才能生效。</strong></p>
+<p><br/>平时上的网站不需要输入端口号：百度——<a target="_blank" rel="noopener" href="http://www.baidu.com/">http://www.baidu.com</a></p>
+<p>HTTP 协议默认的端口号是：80。打开浏览器，直接输入 localhost，访问的就是 80 端口</p>
+<h3 id="4-6-部署-web-工程"><a href="#4-6-部署-web-工程" class="headerlink" title="4.6 部署 web 工程"></a>4.6 部署 web 工程</h3><ol>
+<li><p>第一种方式：只需要把 web 工程的目录拷贝到 Tomcat 的 webapps 目录下即可。</p>
+<p>访问：重启服务器，打开浏览器并输入：<code>http://localhost:tomcat启动的ip/工程名/目录下/文件名</code></p>
+</li>
+<li><p>第二种方式：找到 Tomcat 下的 conf 目录 \Catalina\localhost，进行如下配置：</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">&lt;!-- </span></span><br><span class="line"><span class="comment"> Context：表示一个工程的上下文</span></span><br><span class="line"><span class="comment"> path：表示工程的访问路径</span></span><br><span class="line"><span class="comment"> docBase：表示你的工程目录在哪里</span></span><br><span class="line"><span class="comment">--&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">Context</span> <span class="attr">path</span>=<span class="string">&quot;/abc&quot;</span> <span class="attr">docBase</span>=<span class="string">&quot;E:\...&quot;</span></span></span><br></pre></td></tr></table></figure>
+
+<p>在浏览器输入<code>http://localhost:tomcat启动的ip/配置的path</code>，就可以定位到 dataBase 所指向的文件了。</p>
+</li>
+</ol>
+<h3 id="4-7-直接打开-html-文件和在服务器中访问-html-的区别"><a href="#4-7-直接打开-html-文件和在服务器中访问-html-的区别" class="headerlink" title="4.7 直接打开 html 文件和在服务器中访问 html 的区别"></a>4.7 直接打开 html 文件和在服务器中访问 html 的区别</h3><ul>
+<li><p>直接打开 html 文件，此时浏览器的地址是这个 html 文件在本地的位置，使用的是 file 协议。</p>
+<p>file 协议表示告诉浏览器直接读取 file:// 协议后面的路径，解析展示在浏览器上即可。</p>
+</li>
+<li><p>如果是在浏览器地址中输入访问服务器的地址，此时使用的是 http 协议。</p>
+</li>
+</ul>
+<h3 id="4-8-ROOT-的工程的访问，以及默认-index-html-页面的访问"><a href="#4-8-ROOT-的工程的访问，以及默认-index-html-页面的访问" class="headerlink" title="4.8 ROOT 的工程的访问，以及默认 index.html 页面的访问"></a>4.8 ROOT 的工程的访问，以及默认 index.html 页面的访问</h3><ul>
+<li>当我们在浏览器地址栏中输入访问地址如下：<code>http://ip:port</code>，默认访问的是 ROOT 工程。</li>
+<li>当我们在浏览器地址栏中输入的访问地址如下：<code>http://ip:port/工程名</code>，默认访问 index.html 页面。</li>
+</ul>
+<h2 id="5-IDEA-整合-tomcat"><a href="#5-IDEA-整合-tomcat" class="headerlink" title="5 IDEA 整合 tomcat"></a>5 IDEA 整合 tomcat</h2><ol>
+<li><p>配置：File/settings/Build, Execution, Deployment/Application Servers —&gt; 添加 Tomcat 服务器配置，此时创建 JavaEE 项目的时候就有 Tomcat 选项了</p>
+</li>
+<li><p>根据配置好的 tomcat 创建 JavaEE 项目或模块，可以使用 IDEA 提供的模板，也可以创建普通项目之后再添加Web模块。</p>
+</li>
+<li><p>在 WEB-INF下创建目录 lib，用来存放外部依赖的 jar 包。</p>
+</li>
+<li><p>整个动态 web 工程目录的介绍</p>
+<ul>
+<li>src 用来存放自己编写的 java 源代码</li>
+<li>web 目录用来存放 web 工程的资源文件，比如 html 页面，css 文件，js 文件等。</li>
+<li>web/WEB-INF 目录是一个受服务器保护的目录，浏览器无法访问到此目录的内容。</li>
+<li>web/WEB-INF/lib 用来存放第三方的 jar 包（具体的依赖还需自己配置）。</li>
+<li>web/WEB-INF/web.xml 它是整个动态 web 工程的配置部署描述文件，可以在这里配置很多 web 工程的组件，比如：<ul>
+<li>Servlet 程序</li>
+<li>Filter 过滤器</li>
+<li>Listener 监听器</li>
+<li>Session 超时</li>
+<li>…</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>为 javaEE 程序添加第三方 jar 包</p>
+<p>首先要从相关渠道（例如：maven repository）下载第三方 jar 包到项目的 lib 目录下，然后为项目添加这些 jar 包。</p>
+<p>找到 lib 文件夹下的 jar 包，直接右键 Add as Library。或者打开项目结构菜单，手动添加Library类库。</p>
+</li>
+<li><p>在 IDEA 中部署工程到 Tomcat 上运行</p>
+<ol>
+<li><p>建议修改 Web 工程对应的 Tomcat 运行实例名称。</p>
+</li>
+<li><p>确认 Tomcat 实例中有要部署运行的 Web 工程模块。</p>
+</li>
+<li><p>还可以修改 Tomcat 实例启动后默认的访问地址。</p>
+</li>
+<li><p>在web文件夹下创建 index.jsp 文件，用于启动服务器时访问的默认页面。</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">&lt;%@ page contentType=<span class="string">&quot;text/html;charset=UTF-8&quot;</span> language=<span class="string">&quot;java&quot;</span> %&gt;</span><br><span class="line">&lt;html&gt;</span><br><span class="line">&lt;head&gt;</span><br><span class="line">    &lt;title&gt;$Title$&lt;/title&gt;</span><br><span class="line">&lt;/head&gt;</span><br><span class="line">&lt;body&gt;</span><br><span class="line">&lt;h1&gt;这是web工程的index.jsp页面&lt;/h1&gt;</span><br><span class="line">&lt;/body&gt;</span><br><span class="line">&lt;/html&gt;</span><br></pre></td></tr></table></figure></li>
+<li><p>关于重启选项</p>
+<ul>
+<li>Update resources 更新 web 工程中的资源文件到 Tomcat 运行实例中</li>
+<li>Update classes and resources 更新 web 工程中的 Class 字节码和资源文件到 Tomcat 运行实例中</li>
+<li>Redeploy 重新部署web模块，但是不重启 Tomcat 实例</li>
+<li>Restart server 重启 Tomcat 实例，并更新模块内容</li>
+</ul>
+</li>
+<li><p>其他细节</p>
+<ul>
+<li>Edit configurations 可以设置模块的工程路径，也就是打开浏览器输入的地址:端口号后的工程文件名。</li>
+<li>Edit configurations 也可以修改 Tomcat 实例占用的端口号、运行时默认打开的浏览器、热部署等</li>
+</ul>
+</li>
+</ol>
+</li>
+</ol>
+
+        </div>
+
+        
+            <section class="post-copyright">
+                
+                    <p class="copyright-item">
+                        <span>Author:</span>
+                        <span>John Doe</span>
+                    </p>
+                
+                
+                    <p class="copyright-item">
+                        <span>Permalink:</span>
+                        <span><a href="http://example.com/2021/05/29/Javaweb01-tomcat/">http://example.com/2021/05/29/Javaweb01-tomcat/</a></span>
+                    </p>
+                
+                
+                    <p class="copyright-item">
+                        <span>License:</span>
+                        <span>Copyright (c) 2019 <a target="_blank" rel="noopener" href="http://creativecommons.org/licenses/by-nc/4.0/">CC-BY-NC-4.0</a> LICENSE</span>
+                    </p>
+                
+                
+                     <p class="copyright-item">
+                         <span>Slogan:</span>
+                         <span>Do you believe in <strong>DESTINY</strong>?</span>
+                     </p>
+                
+
+            </section>
+        
+        <section class="post-tags">
+            <div>
+                <span>Tag(s):</span>
+                <span class="tag">
+                    
+                    
+                        <a href="/tags/JavaWeb/"># JavaWeb</a>
+                    
+                        
+                </span>
+            </div>
+            <div>
+                <a href="javascript:window.history.back();">back</a>
+                <span>· </span>
+                <a href="/">home</a>
+            </div>
+        </section>
+        <section class="post-nav">
+            
+                <a class="prev" rel="prev" href="/2021/05/29/Javaweb02-Servlet/">Javaweb（二） - Servlet 入门</a>
+            
+            
+            <a class="next" rel="next" href="/2021/05/19/tcpip-01-hello/">TCP/IP 网络编程（一） 发送Hello World</a>
+            
+        </section>
+
+
+    </article>
+</div>
+
+        </div>
+        <footer id="footer" class="footer">
+    <div class="copyright">
+        <span>© John Doe | Powered by <a href="https://hexo.io" target="_blank">Hexo</a> & <a href="https://github.com/Siricee/hexo-theme-Chic" target="_blank">Chic</a></span>
+    </div>
+</footer>
+
+    </div>
+</body>
+</html>

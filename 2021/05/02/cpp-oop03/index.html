@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+    <meta name="author" content="John Doe">
+
+
+
+
+
+<title>C++面向对象（三）友元&amp;运算符重载 | Hexo</title>
+
+
+
+    <link rel="icon" href="/favicon.ico">
+
+
+
+
+    <!-- stylesheets list from _config.yml -->
+    
+    <link rel="stylesheet" href="/css/style.css">
+    
+
+
+
+    <!-- scripts list from _config.yml -->
+    
+    <script src="/js/script.js"></script>
+    
+    <script src="/js/tocbot.min.js"></script>
+    
+
+
+
+    
+    
+        
+    
+
+
+<meta name="generator" content="Hexo 5.4.0"></head>
+<body>
+    <div class="wrapper">
+        <header>
+    <nav class="navbar">
+        <div class="container">
+            <div class="navbar-header header-logo"><a href="/">Qiny&#39;s Blog</a></div>
+            <div class="menu navbar-right">
+                
+                    <a class="menu-item" href="/archives">Posts</a>
+                
+                    <a class="menu-item" href="/category">Categories</a>
+                
+                    <a class="menu-item" href="/tag">Tags</a>
+                
+                    <a class="menu-item" href="/about">About</a>
+                
+                <input id="switch_default" type="checkbox" class="switch_default">
+                <label for="switch_default" class="toggleBtn"></label>
+            </div>
+        </div>
+    </nav>
+
+    
+    <nav class="navbar-mobile" id="nav-mobile">
+        <div class="container">
+            <div class="navbar-header">
+                <div>
+                    <a href="/">Qiny&#39;s Blog</a><a id="mobile-toggle-theme">·&nbsp;Light</a>
+                </div>
+                <div class="menu-toggle" onclick="mobileBtn()">&#9776; Menu</div>
+            </div>
+            <div class="menu" id="mobile-menu">
+                
+                    <a class="menu-item" href="/archives">Posts</a>
+                
+                    <a class="menu-item" href="/category">Categories</a>
+                
+                    <a class="menu-item" href="/tag">Tags</a>
+                
+                    <a class="menu-item" href="/about">About</a>
+                
+            </div>
+        </div>
+    </nav>
+
+</header>
+<script>
+    var mobileBtn = function f() {
+        var toggleMenu = document.getElementsByClassName("menu-toggle")[0];
+        var mobileMenu = document.getElementById("mobile-menu");
+        if(toggleMenu.classList.contains("active")){
+           toggleMenu.classList.remove("active")
+            mobileMenu.classList.remove("active")
+        }else{
+            toggleMenu.classList.add("active")
+            mobileMenu.classList.add("active")
+        }
+    }
+</script>
+        <div class="main">
+            <div class="container">
+    
+    
+        <div class="post-toc">
+    <div class="tocbot-list">
+    </div>
+    <div class="tocbot-list-menu">
+        <a class="tocbot-toc-expand" onclick="expand_toc()">Expand all</a>
+        <a onclick="go_top()">Back to top</a>
+        <a onclick="go_bottom()">Go to bottom</a>
+    </div>
+</div>
+
+<script>
+    document.ready(
+        function () {
+            tocbot.init({
+                tocSelector: '.tocbot-list',
+                contentSelector: '.post-content',
+                headingSelector: 'h1, h2, h3, h4, h5',
+                collapseDepth: 1,
+                orderedList: false,
+                scrollSmooth: true,
+            })
+        }
+    )
+
+    function expand_toc() {
+        var b = document.querySelector(".tocbot-toc-expand");
+        tocbot.init({
+            tocSelector: '.tocbot-list',
+            contentSelector: '.post-content',
+            headingSelector: 'h1, h2, h3, h4, h5',
+            collapseDepth: 6,
+            orderedList: false,
+            scrollSmooth: true,
+        });
+        b.setAttribute("onclick", "collapse_toc()");
+        b.innerHTML = "Collapse all"
+    }
+
+    function collapse_toc() {
+        var b = document.querySelector(".tocbot-toc-expand");
+        tocbot.init({
+            tocSelector: '.tocbot-list',
+            contentSelector: '.post-content',
+            headingSelector: 'h1, h2, h3, h4, h5',
+            collapseDepth: 1,
+            orderedList: false,
+            scrollSmooth: true,
+        });
+        b.setAttribute("onclick", "expand_toc()");
+        b.innerHTML = "Expand all"
+    }
+
+    function go_top() {
+        window.scrollTo(0, 0);
+    }
+
+    function go_bottom() {
+        window.scrollTo(0, document.body.scrollHeight);
+    }
+
+</script>
+    
+
+    
+    <article class="post-wrap">
+        <header class="post-header">
+            <h1 class="post-title">C++面向对象（三）友元&amp;运算符重载</h1>
+            
+                <div class="post-meta">
+                    
+                        Author: <a itemprop="author" rel="author" href="/">John Doe</a>
+                    
+
+                    
+                        <span class="post-time">
+                        Date: <a href="#">May 2, 2021&nbsp;&nbsp;2:23:06</a>
+                        </span>
+                    
+                    
+                </div>
+            
+        </header>
+
+        <div class="post-content">
+            <h2 id="友元"><a href="#友元" class="headerlink" title="友元"></a>友元</h2><p>生活中你的家有客厅(Public)，有你的卧室(Private)</p>
+<p>客厅所有来的客人都可以进去，但是你的卧室是私有的，也就是说只有你能进去</p>
+<p>但是呢，你也可以允许你的好闺蜜好基友进去。</p>
+<p>在程序里，有些私有属性也想让类外特殊的一些函数或者类进行访问，就需要用到友元的技术</p>
+<p>友元的目的就是让—个函数或者类访问另—个类中私有成员</p>
+<p>友元的关键字为friend</p>
+<p>友元的三种实现</p>
+<ul>
+<li>全局函敌做友元</li>
+<li>类做友元</li>
+<li>成员函数做友元</li>
+</ul>
+<h3 id="1-全局函数做友元"><a href="#1-全局函数做友元" class="headerlink" title="1. 全局函数做友元"></a>1. 全局函数做友元</h3><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Person</span> &#123;</span></span><br><span class="line">    <span class="comment">// 声明friendFunction为Person的全局友元函数</span></span><br><span class="line">    <span class="function"><span class="keyword">friend</span> <span class="keyword">void</span> <span class="title">friendFunction</span><span class="params">()</span></span>;</span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">    <span class="keyword">int</span> age;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="built_in">Person</span>() : <span class="built_in">age</span>(<span class="number">24</span>) &#123; cout &lt;&lt; <span class="string">&quot;构造函数&quot;</span> &lt;&lt; endl; &#125;</span><br><span class="line">    <span class="built_in">Person</span>(<span class="keyword">int</span> age) : <span class="built_in">age</span>(age) &#123; cout &lt;&lt; <span class="string">&quot;有参构造函数&quot;</span> &lt;&lt; endl; &#125;</span><br><span class="line">    ~<span class="built_in">Person</span>() &#123; cout &lt;&lt; <span class="string">&quot;析构函数&quot;</span> &lt;&lt; endl; &#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 友元函数可以访问私有成员变量</span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">friendFunction</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    Person p1 = <span class="number">20</span>;</span><br><span class="line">    cout &lt;&lt; p1.age &lt;&lt; endl;<span class="comment">//20</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 普通函数不能直接访问私有成员变量</span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">normalFunction</span><span class="params">()</span></span>&#123;    </span><br><span class="line">    Person p1 = <span class="number">20</span>;</span><br><span class="line">    cout &lt;&lt; p1.age &lt;&lt; endl;<span class="comment">//20</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="2-类做友元"><a href="#2-类做友元" class="headerlink" title="2. 类做友元"></a>2. 类做友元</h3><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 在Person类中声明Friend类为自己的友元类，Friend类的实例对象就能够访问自己的私有成员变量了</span></span><br><span class="line"><span class="keyword">friend</span> <span class="class"><span class="keyword">class</span> <span class="title">Friend</span>;</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// Friend类中定义了静态成员函数getAge</span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">Friend::getAge</span><span class="params">(<span class="keyword">const</span> Person&amp; p)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> p.age;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// main函数中调用这个静态函数访问Person对象</span></span><br><span class="line">Person p;<span class="comment">// 默认构造函数赋值了24</span></span><br><span class="line">cout &lt;&lt; Friend::<span class="built_in">getAge</span>(p) &lt;&lt; endl; <span class="comment">//24</span></span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="3-成员函数做友元"><a href="#3-成员函数做友元" class="headerlink" title="3. 成员函数做友元"></a>3. 成员函数做友元</h3><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Classment必须声明在Person类之前，不然声明友元类时就不知道Classmate类中有什么函数了</span></span><br><span class="line"><span class="comment">// 由于友元类的成员函数也要用到Person类，Classmate类向上找不到Person类的定义</span></span><br><span class="line"><span class="comment">// 所以就需要在Classmate的前面添加一个空声明</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Person</span>;</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Classmate</span> &#123;</span></span><br><span class="line">    <span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">static</span> <span class="keyword">void</span> <span class="title">isFriendFunction</span><span class="params">(Person&amp; p)</span></span>;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Person</span>&#123;</span></span><br><span class="line">    <span class="comment">// 声明了Classmate的成员函数为Person类的友元成员函数</span></span><br><span class="line">    <span class="function"><span class="keyword">friend</span> <span class="keyword">void</span> <span class="title">Classmate::isFriendFunction</span><span class="params">(Person&amp; p)</span></span>;</span><br><span class="line">    <span class="comment">//...  </span></span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">Classmate::isFriendFunction</span><span class="params">(Person&amp; p)</span> </span>&#123;</span><br><span class="line">    p.age += <span class="number">1</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// main函数中调用</span></span><br><span class="line"></span><br><span class="line">Person p;</span><br><span class="line"><span class="comment">// 命令行：构造函数</span></span><br><span class="line">cout &lt;&lt; Friend::<span class="built_in">getAge</span>(p) &lt;&lt; endl;</span><br><span class="line"><span class="comment">// 命令行：24</span></span><br><span class="line">Classmate::<span class="built_in">isFriendFunction</span>(p);</span><br><span class="line">cout &lt;&lt; Friend::<span class="built_in">getAge</span>(p) &lt;&lt; endl;</span><br><span class="line"><span class="comment">// 命令行：25</span></span><br><span class="line"><span class="comment">// 命令行：析构函数</span></span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="运算符重载"><a href="#运算符重载" class="headerlink" title="运算符重载"></a>运算符重载</h2><p>运算符重载的概念：对已有的运算进行定义，赋予其另一种功能，以适应不同的数据类型。</p>
+<h3 id="1-加号运算符重载"><a href="#1-加号运算符重载" class="headerlink" title="1. 加号运算符重载"></a>1. 加号运算符重载</h3><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 成员函数重载加号</span></span><br><span class="line">Person <span class="keyword">operator</span>+(<span class="keyword">const</span> Person&amp; p)&#123;</span><br><span class="line">    Person temp;</span><br><span class="line">    temp.m_Age = <span class="keyword">this</span>-&gt;m_Age + p.m_Age;</span><br><span class="line">    <span class="keyword">return</span> temp;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 全局函数重载减号</span></span><br><span class="line">Person <span class="keyword">operator</span>-(<span class="keyword">const</span> Person&amp; p1, <span class="keyword">const</span> Person&amp; p2) &#123;</span><br><span class="line">    Person p3;</span><br><span class="line">    p3.m_Age = p1.m_Age - p2.m_Age;</span><br><span class="line">    <span class="keyword">return</span> p3;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 成员函数重载本质调用</span></span><br><span class="line">Person p3 = p1.<span class="keyword">operator</span>+(p2);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 全局函数重载本质调用</span></span><br><span class="line">Person p3 = <span class="keyword">operator</span>-(p1, p2);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 运算符重载也可以发生函数重载</span></span><br><span class="line"><span class="comment">// 重载的+号重载运算符——全局函数方式</span></span><br><span class="line">Person <span class="keyword">operator</span>+(<span class="keyword">int</span> age)&#123;</span><br><span class="line">    Person temp;</span><br><span class="line">    temp.m_Age = <span class="keyword">this</span>-&gt;m_Age + age;</span><br><span class="line">    <span class="keyword">return</span> temp;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>总结：对于内置的数据类型的表达式的运算符是不肯改变的</li>
+<li>总结：不要滥用运算符重载（指故意将加号重载运算符写成减号之类的）</li>
+</ul>
+<h3 id="2-左移运算符重载"><a href="#2-左移运算符重载" class="headerlink" title="2. 左移运算符重载"></a>2. 左移运算符重载</h3><p>作用：可以树池自定义数据类型</p>
+<ul>
+<li>利用成员函数重载左移运算符 p.operator&lt;&lt;(cout)，简化版本 p&lt;&lt; cout</li>
+<li>不会利用成员函数重载&lt;&lt;运算符，因为无法实现cout在左侧</li>
+</ul>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Person中定义友元的重载运算符</span></span><br><span class="line"><span class="keyword">friend</span> ostream&amp; <span class="keyword">operator</span>&lt;&lt;(ostream&amp; out, <span class="keyword">const</span> Person&amp; p);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 类外定义重载运算符</span></span><br><span class="line">ostream &amp; <span class="keyword">operator</span>&lt;&lt;(ostream &amp;out, Person &amp;p) &#123;</span><br><span class="line">    out &lt;&lt; <span class="string">&quot;m_Age = &quot;</span> &lt;&lt; p.m_Age;</span><br><span class="line">    <span class="keyword">return</span> out;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<p>总结：重载运算符配合友元可以实现输出自定义数据类型</p>
+<h3 id="3-递增运算符重载"><a href="#3-递增运算符重载" class="headerlink" title="3. 递增运算符重载"></a>3. 递增运算符重载</h3><p>作用：通过重载递增运算符，实现自己的整型数据递增</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 重载前置++运算符</span></span><br><span class="line"><span class="comment">// 使用Person的引用作为返回值是因为需要用到链式调用，而不能调用拷贝</span></span><br><span class="line">Person&amp; <span class="keyword">operator</span>++() &#123;</span><br><span class="line">    m_Age++;</span><br><span class="line">    <span class="keyword">return</span> *<span class="keyword">this</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 重载后置++运算符</span></span><br><span class="line"><span class="comment">// Person&amp; operator++(int) int代表占位参数，可以用于区分前置和后置递增</span></span><br><span class="line"><span class="comment">// 不使用引用是因为返回的temp在函数结束之后就被释放掉了，再获取的就是非法的引用了</span></span><br><span class="line">Person <span class="keyword">operator</span>++(<span class="keyword">int</span>) &#123;</span><br><span class="line">    <span class="comment">// 先记录当时结果</span></span><br><span class="line">    Person temp = *<span class="keyword">this</span>;</span><br><span class="line">    <span class="comment">// 后递增</span></span><br><span class="line">    m_Age++;</span><br><span class="line">    <span class="comment">// 最后将记录结果做返回</span></span><br><span class="line">    <span class="keyword">return</span> temp;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="4-赋值运算符重载"><a href="#4-赋值运算符重载" class="headerlink" title="4. 赋值运算符重载"></a>4. 赋值运算符重载</h3><p>C++编译器至少给一个类添加4个函数</p>
+<ol>
+<li>默认构造函数(无参,函数体为空)</li>
+<li>默认析构函教(无参。函教体为空)</li>
+<li>默认拷贝构造函改。对属性进行值拷贝</li>
+<li>赋值运算符operator=.对属性进行值拷贝</li>
+</ol>
+<p>如果类中有属性指向堆区,做赋值操作时也会出现深浅拷贝问题</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 假设Person类的属性m_Age是一个指针，调用构造函数的时候使用new创建出堆区的内存空间</span></span><br><span class="line"><span class="comment">// 重载赋值运算符号</span></span><br><span class="line">MyInteger&amp; <span class="keyword">operator</span>=(MyInteger&amp; integer) &#123;</span><br><span class="line">    <span class="keyword">this</span>-&gt;value = <span class="keyword">new</span> <span class="built_in"><span class="keyword">int</span></span>(*integer.value);</span><br><span class="line">    <span class="comment">// 返回自身，而不调用拷贝构造函数</span></span><br><span class="line">    <span class="keyword">return</span> *<span class="keyword">this</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="5-重载关系运算符"><a href="#5-重载关系运算符" class="headerlink" title="5. 重载关系运算符"></a>5. 重载关系运算符</h3><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// value是Person的成员变量，指向int类型的一个指针</span></span><br><span class="line"><span class="keyword">int</span> <span class="keyword">operator</span>==(MyInteger&amp; integer) &#123;</span><br><span class="line">    <span class="keyword">return</span> *integer.value == *value;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>!=、&gt;、&lt;、&gt;=、&lt;=同理</li>
+</ul>
+<h3 id="6-重载函数调用运算符"><a href="#6-重载函数调用运算符" class="headerlink" title="6. 重载函数调用运算符"></a>6. 重载函数调用运算符</h3><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">operator</span><span class="params">()</span><span class="params">(<span class="keyword">int</span> value)</span> </span>&#123; </span><br><span class="line">    cout &lt;&lt; <span class="string">&quot;value的值为：&quot;</span> &lt;&lt; value &lt;&lt; endl;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function">MyInteger <span class="title">integer1</span><span class="params">(<span class="number">0</span>)</span></span>;</span><br><span class="line"><span class="built_in">integer1</span>(<span class="number">0</span>);<span class="comment">// 调用了重载的函数运算符</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">MyInteger</span>()(<span class="number">1</span>);<span class="comment">// 调用了匿名对象的重载运算符</span></span><br></pre></td></tr></table></figure>
+
+
+        </div>
+
+        
+            <section class="post-copyright">
+                
+                    <p class="copyright-item">
+                        <span>Author:</span>
+                        <span>John Doe</span>
+                    </p>
+                
+                
+                    <p class="copyright-item">
+                        <span>Permalink:</span>
+                        <span><a href="http://example.com/2021/05/02/cpp-oop03/">http://example.com/2021/05/02/cpp-oop03/</a></span>
+                    </p>
+                
+                
+                    <p class="copyright-item">
+                        <span>License:</span>
+                        <span>Copyright (c) 2019 <a target="_blank" rel="noopener" href="http://creativecommons.org/licenses/by-nc/4.0/">CC-BY-NC-4.0</a> LICENSE</span>
+                    </p>
+                
+                
+                     <p class="copyright-item">
+                         <span>Slogan:</span>
+                         <span>Do you believe in <strong>DESTINY</strong>?</span>
+                     </p>
+                
+
+            </section>
+        
+        <section class="post-tags">
+            <div>
+                <span>Tag(s):</span>
+                <span class="tag">
+                    
+                    
+                        <a href="/tags/C-%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1/"># C++面向对象</a>
+                    
+                        
+                </span>
+            </div>
+            <div>
+                <a href="javascript:window.history.back();">back</a>
+                <span>· </span>
+                <a href="/">home</a>
+            </div>
+        </section>
+        <section class="post-nav">
+            
+                <a class="prev" rel="prev" href="/2021/05/02/cpp-oop04/">C++面向对象（四）继承</a>
+            
+            
+            <a class="next" rel="next" href="/2021/05/02/cpp-oop02/">C++面向对象（二）C++对象模型和this指针</a>
+            
+        </section>
+
+
+    </article>
+</div>
+
+        </div>
+        <footer id="footer" class="footer">
+    <div class="copyright">
+        <span>© John Doe | Powered by <a href="https://hexo.io" target="_blank">Hexo</a> & <a href="https://github.com/Siricee/hexo-theme-Chic" target="_blank">Chic</a></span>
+    </div>
+</footer>
+
+    </div>
+</body>
+</html>
